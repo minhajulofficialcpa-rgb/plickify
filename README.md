@@ -35,42 +35,6 @@ src/actions
 src/middleware.ts
 ```
 
-Plickify is a production-oriented LMS and digital product shop built with Next.js 15 App Router, TypeScript, Tailwind CSS, shadcn/ui-style components, Framer Motion, Supabase, and PipraPay.
-
-## Core modules
-
-- Supabase Auth-ready role model for admins, instructors, support agents, and students.
-- Course, batch, lesson, assignment, submission, certificate, invoice, support ticket, analytics event, audit log, and digital product tables.
-- Supabase PostgreSQL RLS policies and private Storage buckets for course assets, product files, and certificates.
-- PipraPay create-charge API route and signed webhook handler for bKash, Nagad, and Rocket payment flows.
-- Admin dashboard for revenue, learner, course, support, analytics, and audit-log operations.
-- Student dashboard for learning progress, assignments, certificates, invoices, and support.
-
-## Phase order
-
-Implementation and review must follow `docs/implementation-phases.md`:
-
-1. Base project setup
-2. Supabase schema and RLS
-3. Auth, onboarding and roles
-4. Public pages and SEO
-5. Course, batch and lesson system
-6. Student dashboard
-7. Admin dashboard
-8. Assignment and support ticket
-9. Shop and digital delivery
-10. PipraPay payment
-11. Certificate, invoice and QR verification
-12. Analytics, notification and audit log
-13. Security hardening and production build
-
-After every phase run `npm run lint`, `npm run typecheck`, and `npm run build`.
-
-
-- PipraPay checkout API route and signed webhook handler for bKash, Nagad, and Rocket payment flows.
-- Admin dashboard for revenue, learner, course, support, analytics, and audit-log operations.
-- Student dashboard for learning progress, assignments, certificates, invoices, and support.
-
 ## Getting started
 
 ```bash
@@ -91,28 +55,14 @@ SUPABASE_SERVICE_ROLE_KEY=
 ```
 
 `SUPABASE_SERVICE_ROLE_KEY` is server-only and must never be exposed to client components.
-PIPRAPAY_BASE_URL=https://pay.piprapay.com
-PIPRAPAY_API_KEY=
-PIPRAPAY_WEBHOOK_SECRET=
-```
-
-## Database
-
-Run `supabase/schema.sql` in the Supabase SQL editor. It creates the LMS/shop tables, role/status enums, RLS policies, and Storage buckets.
 
 ## Scripts
 
 ```bash
-npm install
 npm run lint
 npm run typecheck
 npm run build
+npm test
 ```
 
 Payment integration is intentionally not implemented in this base phase.
-
-npm run dev
-npm run build
-npm run typecheck
-npm test
-```
