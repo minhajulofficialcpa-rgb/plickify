@@ -182,6 +182,7 @@ drop policy if exists audit_logs_admin_read on public.audit_logs;
 drop policy if exists profiles_read_own_or_admin on public.profiles;
 drop policy if exists profiles_insert_own on public.profiles;
 drop policy if exists profiles_update_unlocked_own_or_admin on public.profiles;
+drop policy if exists admin_roles_read_own_or_super_admin on public.admin_roles;
 drop policy if exists admin_roles_super_admin_read on public.admin_roles;
 drop policy if exists admin_roles_super_admin_write on public.admin_roles;
 drop policy if exists audit_logs_super_admin_read on public.audit_logs;
@@ -199,9 +200,9 @@ on public.profiles for update
 using ((id = auth.uid() and is_locked = false) or public.has_admin_role('admin'))
 with check ((id = auth.uid() and is_locked = false) or public.has_admin_role('admin'));
 
-create policy admin_roles_super_admin_read
+create policy admin_roles_read_own_or_super_admin
 on public.admin_roles for select
-using (public.is_super_admin());
+using (user_id = auth.uid() or public.is_super_admin());
 
 create policy admin_roles_super_admin_write
 on public.admin_roles for all
