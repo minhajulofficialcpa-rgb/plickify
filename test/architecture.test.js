@@ -1,0 +1,38 @@
+const { readFileSync, existsSync } = require('node:fs');
+const test = require('node:test');
+const assert = require('node:assert/strict');
+
+const read = (path) => readFileSync(path, 'utf8');
+
+test('uses the requested production framework stack', () => {
+  const pkg = JSON.parse(read('package.json'));
+  assert.match(pkg.dependencies.next, /^15\./);
+  assert.ok(pkg.dependencies['@supabase/supabase-js']);
+  assert.ok(pkg.dependencies['@supabase/ssr']);
+  assert.ok(pkg.dependencies['framer-motion']);
+  assert.ok(pkg.dependencies['class-variance-authority']);
+  assert.ok(existsSync('components.json'));
+});
+
+test('defines LMS, commerce, analytics, and audit database tables with RLS', () => {
+  const schema = read('supabase/schema.sql');
+  for (const table of ['courses', 'batches', 'lessons', 'assignments', 'certificates', 'invoices', 'support_tickets', 'analytics_events', 'audit_logs', 'digital_products', 'payments']) {
+    assert.match(schema, new RegExp(`create table public\\.${table}`));
+    assert.match(schema, new RegExp(`alter table public\\.${table} enable row level security`));
+  }
+  assert.match(schema, /insert into storage\.buckets/);
+});
+
+test('includes PipraPay checkout and webhook integration points', () => {
+  assert.match(read('lib/payments/piprapay.ts'), /createPipraPayCheckout/);
+  assert.match(read('lib/payments/piprapay.ts'), /verifyPipraPaySignature/);
+  assert.match(read('app/api/piprapay/create-payment/route.ts'), /POST/);
+  assert.match(read('app/api/piprapay/webhook/route.ts'), /provider_payment_id/);
+});
+
+test('ships admin and student dashboard routes', () => {
+  assert.ok(existsSync('app/dashboard/admin/page.tsx'));
+  assert.ok(existsSync('app/dashboard/student/page.tsx'));
+  assert.match(read('app/dashboard/admin/page.tsx'), /Audit log/);
+  assert.match(read('app/dashboard/student/page.tsx'), /Assignments/);
+});
