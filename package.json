@@ -1,0 +1,42 @@
+{
+  "name": "plickify",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-ready LMS and digital product shop for Plickify.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint app components lib middleware.ts next.config.ts --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@supabase/ssr": "latest",
+    "@supabase/supabase-js": "latest",
+    "class-variance-authority": "latest",
+    "clsx": "latest",
+    "framer-motion": "latest",
+    "lucide-react": "latest",
+    "next": "15.5.19",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "tailwind-merge": "latest",
+    "zod": "latest",
+    "@radix-ui/react-slot": "latest"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "15.5.19",
+    "tailwindcss": "latest",
+    "typescript": "latest",
+    "@eslint/eslintrc": "latest"
+  },
+  "overrides": {
+    "postcss": "^8.5.10"
+  }
+}
