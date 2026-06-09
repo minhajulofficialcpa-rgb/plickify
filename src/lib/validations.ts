@@ -1,17 +1,15 @@
 import { z } from "zod";
 
-export const emailSchema = z.string().email();
+export const emailSchema = z.string().trim().email();
+export const phoneNumberSchema = z.string().trim().min(8).max(20);
 
-export const profileSchema = z.object({
-  fullName: z.string().min(2).max(120),
-  phone: z.string().min(8).max(20).optional(),
-  role: z.enum(["student", "instructor", "support", "admin"]).default("student")
-});
-
-export const signInSchema = z.object({
+export const onboardingSchema = z.object({
+  fullName: z.string().trim().min(2).max(120),
   email: emailSchema,
-  password: z.string().min(8)
+  phoneNumber: phoneNumberSchema
 });
 
+export const profileSchema = onboardingSchema;
+
+export type OnboardingInput = z.infer<typeof onboardingSchema>;
 export type ProfileInput = z.infer<typeof profileSchema>;
-export type SignInInput = z.infer<typeof signInSchema>;
