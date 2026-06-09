@@ -13,12 +13,14 @@ export function SiteNav() {
           <Link href="/#platform">Platform</Link>
           <Link href="/#courses">Courses</Link>
           <Link href="/shop">Shop</Link>
+
           <Link href="/#payments">Payments</Link>
           <Link href="/dashboard/student">Student</Link>
           <Link href="/dashboard/admin">Admin</Link>
         </div>
         <Button asChild variant="accent">
           <Link href="/onboarding">Get started</Link>
+          <Link href="/login">Get started</Link>
         </Button>
       </nav>
     </header>

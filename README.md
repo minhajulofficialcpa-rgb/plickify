@@ -31,6 +31,11 @@ Implementation and review must follow `docs/implementation-phases.md`:
 
 After every phase run `npm run lint`, `npm run typecheck`, and `npm run build`.
 
+
+- PipraPay checkout API route and signed webhook handler for bKash, Nagad, and Rocket payment flows.
+- Admin dashboard for revenue, learner, course, support, analytics, and audit-log operations.
+- Student dashboard for learning progress, assignments, certificates, invoices, and support.
+
 ## Getting started
 
 ```bash

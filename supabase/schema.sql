@@ -2,6 +2,8 @@
 -- Run in Supabase SQL editor after creating a project and storage buckets.
 
 create type public.user_role as enum ('super_admin', 'admin', 'instructor', 'student', 'support');
+
+create type public.user_role as enum ('admin', 'instructor', 'student', 'support');
 create type public.publish_status as enum ('draft', 'published', 'archived');
 create type public.payment_status as enum ('pending', 'paid', 'failed', 'refunded');
 create type public.ticket_status as enum ('open', 'in_progress', 'resolved', 'closed');
@@ -180,6 +182,10 @@ create trigger profiles_prevent_role_escalation
 before update of role on public.profiles
 for each row execute function public.prevent_role_escalation();
 
+
+  select exists (select 1 from public.profiles where id = auth.uid() and role in ('admin', 'support'));
+$$;
+
 alter table public.profiles enable row level security;
 alter table public.courses enable row level security;
 alter table public.batches enable row level security;
@@ -220,6 +226,7 @@ create policy "admins manage assignments" on public.assignments for all using (p
 create policy "admins read payments" on public.payments for select using (public.is_admin());
 create policy "admins read webhook events" on public.payment_webhook_events for select using (public.is_admin());
 create policy "admins insert audit logs" on public.audit_logs for insert with check (public.is_admin());
+
 create policy "admins read analytics" on public.analytics_events for select using (public.is_admin());
 create policy "admins read audit logs" on public.audit_logs for select using (public.is_admin());
 
