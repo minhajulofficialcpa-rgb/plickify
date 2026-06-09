@@ -9,6 +9,20 @@ export interface PipraPayCheckoutResponse {
   status: "pending" | "paid" | "failed";
 }
 
+export interface PipraPayWebhookEvent {
+  payment_id: string;
+  transaction_id: string;
+  invoice_id: string;
+  status: "pending" | "paid" | "failed" | "refunded";
+  amount: number;
+  currency: "BDT";
+  metadata?: {
+    item_id?: string;
+    item_type?: "course" | "product";
+    user_id?: string;
+  };
+}
+
 export async function createPipraPayCheckout(payload: CheckoutPayload): Promise<PipraPayCheckoutResponse> {
   const parsed = checkoutSchema.parse(payload);
   const response = await fetch(`${PIPRAPAY_BASE_URL}/api/checkout`, {
@@ -50,5 +64,10 @@ export function verifyPipraPaySignature(rawBody: string, signature: string | nul
     .update(rawBody)
     .digest("hex");
 
+  const actual = signature.replace(/^sha256=/, "");
+
+  if (actual.length !== expected.length) return false;
+
+  return crypto.timingSafeEqual(Buffer.from(actual, "hex"), Buffer.from(expected, "hex"));
   return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
 }

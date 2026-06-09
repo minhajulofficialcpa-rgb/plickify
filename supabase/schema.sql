@@ -1,6 +1,8 @@
 -- Plickify LMS + Digital Product Shop database baseline.
 -- Run in Supabase SQL editor after creating a project and storage buckets.
 
+create type public.user_role as enum ('super_admin', 'admin', 'instructor', 'student', 'support');
+=======
 create type public.user_role as enum ('admin', 'instructor', 'student', 'support');
 create type public.publish_status as enum ('draft', 'published', 'archived');
 create type public.payment_status as enum ('pending', 'paid', 'failed', 'refunded');
@@ -111,7 +113,18 @@ create table public.payments (
   invoice_id uuid references public.invoices(id) on delete set null,
   provider text not null default 'piprapay',
   provider_payment_id text not null unique,
+  transaction_id text unique,
   status public.payment_status not null default 'pending',
+  raw_payload jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create table public.payment_webhook_events (
+  id bigint generated always as identity primary key,
+  provider text not null default 'piprapay',
+  provider_payment_id text,
+  transaction_id text unique,
+  signature_valid boolean not null default false,
   raw_payload jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
 );
@@ -147,6 +160,28 @@ create table public.audit_logs (
 
 create or replace function public.is_admin()
 returns boolean language sql stable security definer set search_path = public as $$
+  select exists (select 1 from public.profiles where id = auth.uid() and role in ('super_admin', 'admin', 'support'));
+$$;
+
+create or replace function public.is_super_admin()
+returns boolean language sql stable security definer set search_path = public as $$
+  select exists (select 1 from public.profiles where id = auth.uid() and role = 'super_admin');
+$$;
+
+create or replace function public.prevent_role_escalation()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  if old.role is distinct from new.role and not public.is_super_admin() then
+    raise exception 'Only super admins can manage admin roles';
+  end if;
+  return new;
+end;
+$$;
+
+create trigger profiles_prevent_role_escalation
+before update of role on public.profiles
+for each row execute function public.prevent_role_escalation();
+
   select exists (select 1 from public.profiles where id = auth.uid() and role in ('admin', 'support'));
 $$;
 
@@ -162,11 +197,13 @@ alter table public.certificates enable row level security;
 alter table public.invoices enable row level security;
 alter table public.payments enable row level security;
 alter table public.support_tickets enable row level security;
+alter table public.payment_webhook_events enable row level security;
 alter table public.analytics_events enable row level security;
 alter table public.audit_logs enable row level security;
 
 create policy "profiles self read" on public.profiles for select using (id = auth.uid() or public.is_admin());
 create policy "profiles self update" on public.profiles for update using (id = auth.uid()) with check (id = auth.uid());
+create policy "super admins manage roles" on public.profiles for update using (public.is_super_admin()) with check (public.is_super_admin());
 
 create policy "published courses readable" on public.courses for select using (status = 'published' or public.is_admin());
 create policy "admins manage courses" on public.courses for all using (public.is_admin()) with check (public.is_admin());
@@ -186,6 +223,9 @@ create policy "admins manage private operations" on public.batches for all using
 create policy "admins manage lessons" on public.lessons for all using (public.is_admin()) with check (public.is_admin());
 create policy "admins manage assignments" on public.assignments for all using (public.is_admin()) with check (public.is_admin());
 create policy "admins read payments" on public.payments for select using (public.is_admin());
+create policy "admins read webhook events" on public.payment_webhook_events for select using (public.is_admin());
+create policy "admins insert audit logs" on public.audit_logs for insert with check (public.is_admin());
+
 create policy "admins read analytics" on public.analytics_events for select using (public.is_admin());
 create policy "admins read audit logs" on public.audit_logs for select using (public.is_admin());
 

@@ -7,6 +7,8 @@ Plickify is a production-oriented LMS and digital product shop built with Next.j
 - Supabase Auth-ready role model for admins, instructors, support agents, and students.
 - Course, batch, lesson, assignment, submission, certificate, invoice, support ticket, analytics event, audit log, and digital product tables.
 - Supabase PostgreSQL RLS policies and private Storage buckets for course assets, product files, and certificates.
+- PipraPay create-charge API route and signed webhook handler for bKash, Nagad, and Rocket payment flows.
+
 - PipraPay checkout API route and signed webhook handler for bKash, Nagad, and Rocket payment flows.
 - Admin dashboard for revenue, learner, course, support, analytics, and audit-log operations.
 - Student dashboard for learning progress, assignments, certificates, invoices, and support.
@@ -27,6 +29,7 @@ Open <http://localhost:3000>.
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 PIPRAPAY_BASE_URL=https://pay.piprapay.com
 PIPRAPAY_API_KEY=
 PIPRAPAY_WEBHOOK_SECRET=
