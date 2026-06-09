@@ -24,7 +24,7 @@ export async function signInWithGoogleAction() {
   });
 
   if (error) throw new Error(error.message);
-  if (data.url) redirect(data.url);
+  if (data.url) redirect(data.url as Parameters<typeof redirect>[0]);
 
   throw new Error("Google sign-in did not return a redirect URL.");
 }
