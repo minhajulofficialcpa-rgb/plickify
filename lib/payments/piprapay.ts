@@ -69,4 +69,5 @@ export function verifyPipraPaySignature(rawBody: string, signature: string | nul
   if (actual.length !== expected.length) return false;
 
   return crypto.timingSafeEqual(Buffer.from(actual, "hex"), Buffer.from(expected, "hex"));
+  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
 }

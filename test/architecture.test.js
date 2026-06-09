@@ -17,6 +17,7 @@ test('uses the requested production framework stack', () => {
 test('defines LMS, commerce, analytics, and audit database tables with RLS', () => {
   const schema = read('supabase/schema.sql');
   for (const table of ['courses', 'batches', 'lessons', 'assignments', 'certificates', 'invoices', 'support_tickets', 'analytics_events', 'audit_logs', 'digital_products', 'payments', 'payment_webhook_events']) {
+  for (const table of ['courses', 'batches', 'lessons', 'assignments', 'certificates', 'invoices', 'support_tickets', 'analytics_events', 'audit_logs', 'digital_products', 'payments']) {
     assert.match(schema, new RegExp(`create table public\\.${table}`));
     assert.match(schema, new RegExp(`alter table public\\.${table} enable row level security`));
   }
@@ -31,6 +32,8 @@ test('includes PipraPay checkout and webhook integration points', () => {
   assert.match(read('app/api/piprapay/webhook/route.ts'), /provider_payment_id/);
   assert.match(read('app/api/piprapay/webhook/route.ts'), /Amount mismatch/);
   assert.match(read('app/api/piprapay/webhook/route.ts'), /Duplicate transaction/);
+  assert.match(read('app/api/piprapay/create-payment/route.ts'), /POST/);
+  assert.match(read('app/api/piprapay/webhook/route.ts'), /provider_payment_id/);
 });
 
 test('ships admin and student dashboard routes', () => {
