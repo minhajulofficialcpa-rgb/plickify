@@ -2,7 +2,7 @@
 -- Run in Supabase SQL editor after creating a project and storage buckets.
 
 create type public.user_role as enum ('super_admin', 'admin', 'instructor', 'student', 'support');
-=======
+
 create type public.user_role as enum ('admin', 'instructor', 'student', 'support');
 create type public.publish_status as enum ('draft', 'published', 'archived');
 create type public.payment_status as enum ('pending', 'paid', 'failed', 'refunded');
@@ -181,6 +181,7 @@ $$;
 create trigger profiles_prevent_role_escalation
 before update of role on public.profiles
 for each row execute function public.prevent_role_escalation();
+
 
   select exists (select 1 from public.profiles where id = auth.uid() and role in ('admin', 'support'));
 $$;

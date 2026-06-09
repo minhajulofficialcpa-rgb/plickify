@@ -8,6 +8,29 @@ Plickify is a production-oriented LMS and digital product shop built with Next.j
 - Course, batch, lesson, assignment, submission, certificate, invoice, support ticket, analytics event, audit log, and digital product tables.
 - Supabase PostgreSQL RLS policies and private Storage buckets for course assets, product files, and certificates.
 - PipraPay create-charge API route and signed webhook handler for bKash, Nagad, and Rocket payment flows.
+- Admin dashboard for revenue, learner, course, support, analytics, and audit-log operations.
+- Student dashboard for learning progress, assignments, certificates, invoices, and support.
+
+## Phase order
+
+Implementation and review must follow `docs/implementation-phases.md`:
+
+1. Base project setup
+2. Supabase schema and RLS
+3. Auth, onboarding and roles
+4. Public pages and SEO
+5. Course, batch and lesson system
+6. Student dashboard
+7. Admin dashboard
+8. Assignment and support ticket
+9. Shop and digital delivery
+10. PipraPay payment
+11. Certificate, invoice and QR verification
+12. Analytics, notification and audit log
+13. Security hardening and production build
+
+After every phase run `npm run lint`, `npm run typecheck`, and `npm run build`.
+
 
 - PipraPay checkout API route and signed webhook handler for bKash, Nagad, and Rocket payment flows.
 - Admin dashboard for revenue, learner, course, support, analytics, and audit-log operations.

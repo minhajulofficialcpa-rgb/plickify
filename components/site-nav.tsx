@@ -12,11 +12,14 @@ export function SiteNav() {
         <div className="hidden items-center gap-7 text-sm font-semibold text-muted-foreground md:flex">
           <Link href="/#platform">Platform</Link>
           <Link href="/#courses">Courses</Link>
+          <Link href="/shop">Shop</Link>
+
           <Link href="/#payments">Payments</Link>
           <Link href="/dashboard/student">Student</Link>
           <Link href="/dashboard/admin">Admin</Link>
         </div>
         <Button asChild variant="accent">
+          <Link href="/onboarding">Get started</Link>
           <Link href="/login">Get started</Link>
         </Button>
       </nav>
