@@ -43,7 +43,7 @@ export default async function AdminAssignmentsPage() {
             { header: "Content", cell: (row) => <div className="max-w-xs"><p className="line-clamp-3">{row.submission_text ?? "-"}</p>{row.submission_url ? <Link href={row.submission_url} className="text-accent">URL</Link> : null} {row.github_url ? <Link href={row.github_url} className="ml-2 text-accent">GitHub</Link> : null} {row.attachment_url ? <Link href={row.attachment_url} className="ml-2 text-accent">File</Link> : null}</div> },
             { header: "Status", cell: (row) => <StatusBadge value={row.status} /> },
             { header: "Marks", cell: (row) => row.marks ?? row.score ?? "-" },
-            { header: "Review", cell: (row) => <form action={updateAssignmentSubmissionAction} className="grid min-w-48 gap-2"><HiddenId id={row.id} /><Select label="Status" name="status" options={["submitted", "graded", "returned", "late"]} /><Field label="Marks" name="marks" type="number" required={false} /><Textarea label="Feedback" name="feedback" required={false} /><Button type="submit" size="sm" variant="accent">Review</Button></form> }
+            { header: "Review", cell: (row) => <form action={updateAssignmentSubmissionAction} className="grid min-w-48 gap-2"><HiddenId id={row.id} /><Select label="Status" name="status" options={["submitted", "graded", "returned", "late"]} /><Field label="Marks" name="marks" type="number" required={false} /><Textarea label="Feedback" name="feedback" /><Button type="submit" size="sm" variant="accent">Review</Button></form> }
           ]} />
         </AdminSection>
       </div>
