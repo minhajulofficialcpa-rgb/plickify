@@ -38,7 +38,7 @@ const requiredTables = [
 function tableBlock(table) {
   const start = sql.indexOf(`create table public.${table} (`);
   assert.notEqual(start, -1, `${table} should be created`);
-  const end = sql.indexOf('\n);', start);
+  const end = sql.indexOf(');', start);
   assert.notEqual(end, -1, `${table} create statement should close`);
   return sql.slice(start, end);
 }
