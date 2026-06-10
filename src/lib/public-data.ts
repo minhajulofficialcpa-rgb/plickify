@@ -1,4 +1,5 @@
 import "server-only";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 export interface PublicCourse {
@@ -128,6 +129,10 @@ function hasSupabasePublicEnv() {
   return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 }
 
+function hasSupabaseAdminEnv() {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+}
+
 function formatErrorSafe(error: unknown) {
   return error instanceof Error ? error.message : "Unknown Supabase read error";
 }
@@ -241,10 +246,10 @@ export async function getProductBySlug(slug: string): Promise<PublicProduct | nu
 }
 
 export async function verifyCertificate(code: string): Promise<CertificateVerification | null> {
-  if (!hasSupabasePublicEnv()) return null;
+  if (!hasSupabaseAdminEnv()) return null;
 
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { data, error } = await supabase
       .from("certificates")
       .select("certificate_number, verification_code, issued_at, revoked_at")
@@ -260,10 +265,10 @@ export async function verifyCertificate(code: string): Promise<CertificateVerifi
 }
 
 export async function verifyInvoice(code: string): Promise<InvoiceVerification | null> {
-  if (!hasSupabasePublicEnv()) return null;
+  if (!hasSupabaseAdminEnv()) return null;
 
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { data, error } = await supabase
       .from("invoices")
       .select("invoice_number, status, amount_bdt, currency, paid_at")
