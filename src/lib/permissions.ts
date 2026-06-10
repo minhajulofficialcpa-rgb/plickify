@@ -21,7 +21,7 @@ export function hasRole(userRole: UserRole | undefined, requiredRole: UserRole) 
 }
 
 export function canAccessAdmin(userRole: UserRole | undefined) {
-  return canManageContent(userRole) || userRole === "admin" || userRole === "super_admin";
+  return Boolean(userRole && staffRoles.includes(userRole));
 }
 
 export function canManageContent(userRole: UserRole | undefined) {
@@ -34,4 +34,8 @@ export function canModerateSupport(userRole: UserRole | undefined) {
 
 export function canManageRoles(userRole: UserRole | undefined) {
   return userRole === "super_admin";
+}
+
+export function canManagePayments(userRole: UserRole | undefined) {
+  return userRole === "admin" || userRole === "super_admin";
 }
