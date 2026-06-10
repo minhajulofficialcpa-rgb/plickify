@@ -118,6 +118,30 @@ test('provides requested admin dashboard routes and audited actions', () => {
   assert.match(read('src/lib/admin-dashboard.ts'), /getAdminAnalytics/);
 });
 
+test('implements assignment and support ticket workflows', () => {
+  const studentActions = read('src/actions/student.ts');
+  const adminActions = read('src/actions/admin.ts');
+  const studentAssignments = read('src/app/dashboard/assignments/page.tsx');
+  const studentSupport = read('src/app/dashboard/support/page.tsx');
+  const adminAssignments = read('src/app/admin/assignments/page.tsx');
+  const adminTickets = read('src/app/admin/tickets/page.tsx');
+
+  assert.match(studentActions, /submitAssignmentAction/);
+  assert.match(studentActions, /replySupportTicketAction/);
+  assert.match(adminActions, /updateAssignmentSubmissionAction/);
+  assert.match(adminActions, /replySupportTicketAsStaffAction/);
+  assert.match(adminActions, /notifications/);
+  assert.match(adminActions, /support_ticket\.reply/);
+  assert.match(studentAssignments, /submissionText/);
+  assert.match(studentAssignments, /githubUrl/);
+  assert.match(studentSupport, /priority/);
+  assert.match(studentSupport, /support_messages/);
+  assert.match(adminAssignments, /batchId/);
+  assert.match(adminAssignments, /Feedback/);
+  assert.match(adminTickets, /updateTicketStatusAction/);
+  assert.match(adminTickets, /replySupportTicketAsStaffAction/);
+});
+
 test('does not implement payment yet', () => {
   assert.equal(existsSync('src/app/api/piprapay'), false);
   assert.equal(existsSync('src/lib/payments'), false);
