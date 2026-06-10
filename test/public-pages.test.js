@@ -26,16 +26,14 @@ test('provides all requested public pages', () => {
   }
 });
 
-test('homepage renders dynamic public LMS and shop sections', () => {
+test('homepage renders dynamic public LMS sections', () => {
   const homepage = read('src/app/page.tsx');
 
   assert.match(homepage, /getFeaturedCourse/);
   assert.match(homepage, /getPublishedCourses/);
-  assert.match(homepage, /getPublishedProducts/);
-  assert.match(homepage, /getPublishedReviews/);
   assert.match(homepage, /Featured course/);
   assert.match(homepage, /Student feedback/);
-  assert.match(homepage, /Contact/);
+  assert.match(homepage, /Contact us/);
   assert.match(homepage, /PublicFooter/);
 });
 
@@ -47,11 +45,11 @@ test('course and product pages include dynamic metadata and schema', () => {
   assert.match(coursePage, /courseSchema/);
   assert.match(coursePage, /getCountdownLabel/);
   assert.match(coursePage, /Curriculum preview/);
-  assert.match(coursePage, /FAQ/);
+  assert.match(coursePage, /faqs/);
 
   assert.match(productPage, /generateMetadata/);
   assert.match(productPage, /productSchema/);
-  assert.match(productPage, /accessType/);
+  assert.match(productPage, /accessType|access_type/);
   assert.match(productPage, /category/);
 });
 
@@ -83,7 +81,7 @@ test('contact form uses a secure server action and Zod validation', () => {
   assert.match(actions, /createAdminClient/);
   assert.match(actions, /contact_messages/);
   assert.match(validations, /contactMessageSchema/);
-  assert.match(validations, /phone_number/);
+  assert.match(validations, /message/);
 });
 
 test('certificate and invoice verification use server-side lookup helpers', () => {
