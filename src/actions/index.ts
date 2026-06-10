@@ -4,8 +4,9 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireSuperAdmin } from "@/lib/auth";
 import type { AssignableRole } from "@/lib/role-management";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import { onboardingSchema } from "@/lib/validations";
+import { contactMessageSchema, onboardingSchema } from "@/lib/validations";
 
 function getOrigin(headerOrigin: string | null) {
   const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL ?? headerOrigin ?? "http://localhost:3000";
@@ -33,6 +34,26 @@ export async function signInWithGoogleAction() {
   if (data.url) redirect(data.url as Parameters<typeof redirect>[0]);
 
   throw new Error("Google sign-in did not return a redirect URL.");
+}
+
+export async function submitContactMessageAction(formData: FormData) {
+  const payload = contactMessageSchema.parse({
+    name: formData.get("name"),
+    email: formData.get("email"),
+    subject: formData.get("subject") || undefined,
+    message: formData.get("message")
+  });
+
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("contact_messages").insert({
+    name: payload.name,
+    email: payload.email,
+    subject: payload.subject ?? null,
+    message: payload.message
+  });
+
+  if (error) throw new Error(error.message);
+  redirect("/contact?sent=1");
 }
 
 export async function completeOnboardingAction(formData: FormData) {
