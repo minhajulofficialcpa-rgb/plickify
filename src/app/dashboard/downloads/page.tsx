@@ -15,7 +15,7 @@ export default async function DashboardDownloadsPage() {
     <div>
       <p className="text-sm font-bold uppercase tracking-[0.2em] text-accent">Downloads</p>
       <h1 className="mt-3 text-4xl font-black tracking-[-0.05em]">Authorized downloads</h1>
-      <p className="mt-3 text-muted-foreground">Only purchased or authorized products appear here. Signed URLs are generated server-side and expire in 5 minutes.</p>
+      <p className="mt-3 text-muted-foreground">Only purchased or authorized products appear here. 5-minute signed URLs are generated server-side.</p>
       <section className="mt-8 grid gap-4 md:grid-cols-2">
         {downloads.length ? downloads.map((download) => {
           const product = firstRelation(download.products);
