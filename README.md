@@ -32,6 +32,7 @@ SUPABASE_SERVICE_ROLE_KEY=
 - Digital product shop with category filters, order access rules, and private signed downloads.
 - Assignment, support, and shop deployment verification are tracked through the production build.
 - Latest digital shop verification trigger: 2026-06-10.
+- Signed URL redirect verification trigger: 2026-06-10.
 
 ## Scripts
 
