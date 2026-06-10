@@ -5,6 +5,12 @@ export const phoneNumberSchema = z.string().trim().min(8).max(20);
 export const uuidSchema = z.string().uuid();
 const optionalUrlSchema = z.string().trim().url().optional().or(z.literal(""));
 
+export const productCategorySchema = z.enum(["free", "paid", "software", "subscription", "manual_service"]);
+export const productAccessTypeSchema = z.enum(["free", "purchase", "manual", "subscription"]);
+export const orderStatusSchema = z.enum(["pending", "paid", "failed", "cancelled"]);
+export const paymentStatusSchema = z.enum(["pending", "paid", "failed", "cancelled"]);
+export const activationStatusSchema = z.enum(["pending", "active", "cancelled"]);
+
 export const onboardingSchema = z.object({
   fullName: z.string().trim().min(2).max(120),
   email: emailSchema,
@@ -62,6 +68,33 @@ export const enrollmentMutationSchema = z.object({
   orderId: uuidSchema.optional().or(z.literal("")),
   status: z.enum(["pending", "active", "cancelled", "completed", "expired"]),
   activationStatus: z.enum(["pending", "active", "inactive", "revoked"]).default("pending")
+});
+
+export const productMutationSchema = z.object({
+  id: uuidSchema.optional().or(z.literal("")),
+  title: z.string().trim().min(3).max(180),
+  slug: z.string().trim().min(3).max(180).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  category: productCategorySchema,
+  priceBdt: z.coerce.number().int().min(0),
+  accessType: productAccessTypeSchema,
+  description: z.string().trim().max(10000).optional(),
+  privateFilePath: z.string().trim().max(600).optional(),
+  status: z.enum(["draft", "published", "archived"])
+});
+
+export const productCheckoutSchema = z.object({
+  productId: uuidSchema
+});
+
+export const downloadRequestSchema = z.object({
+  downloadId: uuidSchema
+});
+
+export const orderMutationSchema = z.object({
+  id: uuidSchema,
+  status: orderStatusSchema,
+  paymentStatus: paymentStatusSchema,
+  activationStatus: activationStatusSchema
 });
 
 export const assignmentMutationSchema = z.object({
@@ -129,6 +162,10 @@ export type CourseMutationInput = z.infer<typeof courseMutationSchema>;
 export type BatchMutationInput = z.infer<typeof batchMutationSchema>;
 export type LessonMutationInput = z.infer<typeof lessonMutationSchema>;
 export type EnrollmentMutationInput = z.infer<typeof enrollmentMutationSchema>;
+export type ProductMutationInput = z.infer<typeof productMutationSchema>;
+export type ProductCheckoutInput = z.infer<typeof productCheckoutSchema>;
+export type DownloadRequestInput = z.infer<typeof downloadRequestSchema>;
+export type OrderMutationInput = z.infer<typeof orderMutationSchema>;
 export type AssignmentMutationInput = z.infer<typeof assignmentMutationSchema>;
 export type AssignmentSubmissionInput = z.infer<typeof assignmentSubmissionSchema>;
 export type AssignmentReviewInput = z.infer<typeof assignmentReviewSchema>;
