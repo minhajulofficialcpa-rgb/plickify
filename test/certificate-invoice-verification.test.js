@@ -53,7 +53,7 @@ test('admin can issue certificates and view invoices', () => {
   const certificateActions = read('src/actions/certificates.ts');
   const adminCertificates = read('src/app/admin/certificates/page.tsx');
   const adminInvoices = read('src/app/admin/invoices/page.tsx');
-  const adminShell = read('src/components/admin/admin-shell.tsx');
+  const adminNav = read('src/components/admin/admin-nav.tsx');
 
   assert.match(certificateActions, /issue_course_certificate/);
   assert.match(certificateActions, /writeAuditEvent/);
@@ -63,5 +63,5 @@ test('admin can issue certificates and view invoices', () => {
   assert.match(adminCertificates, /progress_percent/);
   assert.match(adminInvoices, /getAdminInvoices/);
   assert.match(adminInvoices, /Verify page/);
-  assert.match(adminShell, /\/admin\/invoices/);
+  assert.match(adminNav, /\/admin\/invoices/);
 });
