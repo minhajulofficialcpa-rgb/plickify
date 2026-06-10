@@ -3,7 +3,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const migrationPath = 'supabase/migrations/202606090001_phase_2_lms_shop_schema.sql';
+const assignmentSupportMigrationPath = 'supabase/migrations/20260610050000_assignment_support_system.sql';
 const sql = readFileSync(migrationPath, 'utf8');
+const assignmentSupportSql = readFileSync(assignmentSupportMigrationPath, 'utf8');
 
 const requiredTables = [
   'profiles',
@@ -35,8 +37,8 @@ const requiredTables = [
 
 test('phase 2 migration creates all requested LMS and shop tables with UUID primary keys', () => {
   for (const table of requiredTables) {
-    assert.match(sql, new RegExp(`create table public\\.${table} \\(`), `${table} should be created`);
-    assert.match(sql, new RegExp(`create table public\\.${table} \\([\\s\\S]*?id uuid primary key`, 'm'), `${table} should use a UUID primary key`);
+    assert.match(sql, new RegExp(`create table public\\.${table} \(`), `${table} should be created`);
+    assert.match(sql, new RegExp(`create table public\\.${table} \([\s\S]*?id uuid primary key`, 'm'), `${table} should use a UUID primary key`);
     assert.match(sql, new RegExp(`alter table public\\.${table} enable row level security`), `${table} should enable RLS`);
   }
 
@@ -87,4 +89,24 @@ test('phase 2 migration includes batch allocation and audit triggers', () => {
   for (const trigger of ['admin_roles_audit', 'courses_audit', 'batches_audit', 'products_audit', 'assignments_audit']) {
     assert.match(sql, new RegExp(`create trigger ${trigger}`), `${trigger} should exist`);
   }
+});
+
+test('assignment support migration adds batch assignments, submissions, threaded tickets, and notifications', () => {
+  for (const column of ['attachment_url', 'max_marks']) {
+    assert.match(assignmentSupportSql, new RegExp(`add column if not exists ${column}`));
+  }
+
+  for (const column of ['submission_text', 'submission_url', 'github_url', 'attachment_url', 'marks', 'reviewed_by']) {
+    assert.match(assignmentSupportSql, new RegExp(`add column if not exists ${column}`));
+  }
+
+  assert.match(assignmentSupportSql, /support_messages[\s\S]*add column if not exists attachment_url/);
+  assert.match(assignmentSupportSql, /notifications[\s\S]*add column if not exists related_type/);
+  assert.match(assignmentSupportSql, /assignments_batch_required_for_published/);
+  assert.match(assignmentSupportSql, /assignment_submissions_has_content/);
+  assert.match(assignmentSupportSql, /create policy assignments_read/);
+  assert.match(assignmentSupportSql, /exists \([\s\S]*public\.user_batches/);
+  assert.match(assignmentSupportSql, /create policy support_messages_participant_or_support/);
+  assert.match(assignmentSupportSql, /create or replace function public\.touch_ticket_from_message\(\)/);
+  assert.match(assignmentSupportSql, /create trigger support_messages_touch_ticket/);
 });
