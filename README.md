@@ -19,9 +19,15 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_DOWNLOADS_BUCKET=downloads
+NEXT_PUBLIC_GA_MEASUREMENT_ID=
+NEXT_PUBLIC_META_PIXEL_ID=
+META_PIXEL_ID=
+META_CAPI_ACCESS_TOKEN=
+PIPRAPAY_WEBHOOK_SECRET=
 ```
 
-`SUPABASE_SERVICE_ROLE_KEY` is server-only and must never be exposed to client components.
+`SUPABASE_SERVICE_ROLE_KEY`, `META_CAPI_ACCESS_TOKEN`, and `PIPRAPAY_WEBHOOK_SECRET` are server-only secrets and must never be exposed to client components.
 
 ## Implemented systems
 
@@ -32,11 +38,13 @@ SUPABASE_SERVICE_ROLE_KEY=
 - Digital product shop with category filters, order access rules, and private signed downloads.
 - Certificate and invoice public verification with QR-backed records.
 - Analytics, in-app notifications, Meta CAPI, and audit hardening are wired for deployment verification.
+- Hardened PipraPay webhook validates signatures, duplicate transactions, and amount mismatches; checkout UI is still intentionally not implemented.
 - Assignment, support, shop, certificate, and invoice deployment verification are tracked through the production build.
 - Latest digital shop verification trigger: 2026-06-10.
 - Signed URL redirect verification trigger: 2026-06-10.
 - Certificate invoice verification trigger: 2026-06-10.
 - Analytics notification audit verification trigger: 2026-06-10.
+- Security hardening verification trigger: 2026-06-10.
 
 ## Scripts
 
@@ -47,4 +55,4 @@ npm run build
 npm test
 ```
 
-Payment integration is intentionally not implemented in this base phase.
+Payment checkout UI is intentionally not implemented yet; only the secure server-side webhook foundation exists.
