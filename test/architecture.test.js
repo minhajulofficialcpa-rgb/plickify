@@ -169,8 +169,9 @@ test('implements digital product shop access and downloads', () => {
   assert.match(downloadsPage, /Generate 5-minute link/);
 });
 
-test('does not implement payment yet', () => {
-  assert.equal(existsSync('src/app/api/piprapay'), false);
+test('implements only secure payment webhook, not payment frontend yet', () => {
+  assert.ok(existsSync('src/app/api/piprapay/webhook/route.ts'));
   assert.equal(existsSync('src/lib/payments'), false);
   assert.doesNotMatch(read('package.json'), /piprapay/i);
+  assert.match(read('src/app/api/piprapay/webhook/route.ts'), /PIPRAPAY_WEBHOOK_SECRET/);
 });
