@@ -3,6 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const read = (path) => readFileSync(path, 'utf8');
+const adminRouteCount = 16;
 
 test('uses the requested production Next.js stack', () => {
   const pkg = JSON.parse(read('package.json'));
@@ -87,7 +88,7 @@ test('provides requested student dashboard routes', () => {
 });
 
 test('provides requested admin dashboard routes and audited actions', () => {
-  for (const path of [
+  const adminRoutes = [
     'src/app/admin/page.tsx',
     'src/app/admin/users/page.tsx',
     'src/app/admin/courses/page.tsx',
@@ -104,7 +105,10 @@ test('provides requested admin dashboard routes and audited actions', () => {
     'src/app/admin/certificates/page.tsx',
     'src/app/admin/audit-logs/page.tsx',
     'src/app/admin/settings/page.tsx'
-  ]) {
+  ];
+
+  assert.equal(adminRoutes.length, adminRouteCount);
+  for (const path of adminRoutes) {
     assert.ok(existsSync(path), `${path} should exist`);
   }
 
