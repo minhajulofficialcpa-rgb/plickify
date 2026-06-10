@@ -1,8 +1,16 @@
 import Link from "next/link";
+import type { Route } from "next";
 import type { ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
 import { BookOpen, Boxes, FileCheck2, GraduationCap, HelpCircle, Home, LibraryBig, Receipt, User, Video } from "lucide-react";
 
-const links = [
+interface DashboardNavItem {
+  href: Route;
+  label: string;
+  icon: LucideIcon;
+}
+
+const links: DashboardNavItem[] = [
   { href: "/dashboard", label: "Home", icon: Home },
   { href: "/dashboard/courses", label: "Courses", icon: BookOpen },
   { href: "/dashboard/batches", label: "Batches", icon: LibraryBig },
