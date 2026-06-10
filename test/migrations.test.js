@@ -37,8 +37,8 @@ const requiredTables = [
 
 test('phase 2 migration creates all requested LMS and shop tables with UUID primary keys', () => {
   for (const table of requiredTables) {
-    assert.match(sql, new RegExp(`create table public\\.${table} \(`), `${table} should be created`);
-    assert.match(sql, new RegExp(`create table public\\.${table} \([\s\S]*?id uuid primary key`, 'm'), `${table} should use a UUID primary key`);
+    assert.ok(sql.includes(`create table public.${table} (`), `${table} should be created`);
+    assert.match(sql, new RegExp(`create table public\\.${table} \\([\\s\\S]*?id uuid primary key`, 'm'), `${table} should use a UUID primary key`);
     assert.match(sql, new RegExp(`alter table public\\.${table} enable row level security`), `${table} should enable RLS`);
   }
 
