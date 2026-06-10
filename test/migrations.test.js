@@ -4,8 +4,10 @@ const assert = require('node:assert/strict');
 
 const migrationPath = 'supabase/migrations/202606090001_phase_2_lms_shop_schema.sql';
 const assignmentSupportMigrationPath = 'supabase/migrations/20260610050000_assignment_support_system.sql';
+const digitalShopMigrationPath = 'supabase/migrations/20260610070000_digital_product_shop.sql';
 const sql = readFileSync(migrationPath, 'utf8');
 const assignmentSupportSql = readFileSync(assignmentSupportMigrationPath, 'utf8');
+const digitalShopSql = readFileSync(digitalShopMigrationPath, 'utf8');
 
 const requiredTables = [
   'profiles',
@@ -117,4 +119,26 @@ test('assignment support migration adds batch assignments, submissions, threaded
   assert.match(assignmentSupportSql, /create policy support_messages_participant_or_support/);
   assert.match(assignmentSupportSql, /create or replace function public\.touch_ticket_from_message\(\)/);
   assert.match(assignmentSupportSql, /create trigger support_messages_touch_ticket/);
+});
+
+test('digital product shop migration protects files and grants access from orders', () => {
+  for (const column of ['category', 'access_type', 'private_file_path', 'download_bucket']) {
+    assert.match(digitalShopSql, new RegExp(`alter table public\\.products add column if not exists ${column}`));
+  }
+
+  for (const column of ['item_type', 'access_type', 'activation_status']) {
+    assert.match(digitalShopSql, new RegExp(`alter table public\\.orders add column if not exists ${column}`));
+  }
+
+  assert.match(digitalShopSql, /products_category_check/);
+  assert.match(digitalShopSql, /free', 'paid', 'software', 'subscription', 'manual_service/);
+  assert.match(digitalShopSql, /downloads_user_product_free_unique/);
+  assert.match(digitalShopSql, /create or replace function public\.grant_product_download_access/);
+  assert.match(digitalShopSql, /private_file_path/);
+  assert.match(digitalShopSql, /create or replace function public\.fulfill_product_order_access/);
+  assert.match(digitalShopSql, /new\.status = 'paid'/);
+  assert.match(digitalShopSql, /new\.payment_status = 'paid'/);
+  assert.match(digitalShopSql, /new\.activation_status = 'active'/);
+  assert.match(digitalShopSql, /create trigger orders_fulfill_product_order_access/);
+  assert.match(digitalShopSql, /create policy downloads_owner_read/);
 });
