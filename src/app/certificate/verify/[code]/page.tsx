@@ -20,7 +20,7 @@ type PageProps = {
 export default async function CertificateVerifyPage({ params }: PageProps) {
   const { code } = await params;
   const certificate = await verifyCertificate(code);
-  const isValid = certificate?.status === "issued";
+  const isValid = Boolean(certificate && !certificate.revoked_at);
 
   return (
     <main className="min-h-screen bg-background">
@@ -37,10 +37,10 @@ export default async function CertificateVerifyPage({ params }: PageProps) {
           <CardContent className="space-y-6">
             {certificate ? (
               <div className="grid gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:grid-cols-2">
-                <Info label="Student" value={certificate.studentName} />
-                <Info label="Course" value={certificate.courseTitle} />
-                <Info label="Issued" value={formatDate(certificate.issuedAt)} />
-                <Info label="Status" value={certificate.status} />
+                <Info label="Certificate number" value={certificate.certificate_number} />
+                <Info label="Issued" value={formatDate(certificate.issued_at)} />
+                <Info label="Status" value={isValid ? "valid" : "revoked"} />
+                <Info label="Revoked" value={certificate.revoked_at ? formatDate(certificate.revoked_at) : "No"} />
               </div>
             ) : (
               <p className="rounded-2xl border border-destructive/30 bg-destructive/10 p-5 text-sm text-muted-foreground">
