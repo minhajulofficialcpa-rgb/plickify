@@ -1,3 +1,4 @@
+import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { LayoutDashboard, LogIn, ShieldCheck, UserRound } from "lucide-react";
@@ -11,7 +12,7 @@ const navItems = [
   { href: "/shop", label: "Shop" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" }
-];
+] satisfies Array<{ href: Route; label: string }>;
 
 export async function PublicHeader() {
   const [profile, role] = await Promise.all([getCurrentProfile(), getCurrentRole()]);
