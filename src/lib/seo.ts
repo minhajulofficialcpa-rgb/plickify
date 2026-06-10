@@ -11,7 +11,9 @@ function normalizeSiteUrl(url: string) {
 export const siteConfig = {
   name: "Plickify",
   description: "A focused LMS and digital product shop for practical online learning.",
-  url: normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL ?? "https://plickify.vercel.app")
+  url: normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL ?? "https://plickify.vercel.app"),
+  logoPath: "/brand/plickify-logo.svg",
+  markPath: "/brand/plickify-mark.svg"
 };
 
 export function absoluteUrl(path = "/") {
@@ -32,7 +34,8 @@ export function createMetadata({
   const resolvedTitle = title ?? siteConfig.name;
   const resolvedDescription = description ?? siteConfig.description;
   const canonical = absoluteUrl(path);
-  const images = image ? [{ url: image }] : undefined;
+  const resolvedImage = image ?? absoluteUrl(siteConfig.logoPath);
+  const images = [{ url: resolvedImage }];
 
   return {
     title: resolvedTitle,
@@ -50,10 +53,10 @@ export function createMetadata({
       images
     },
     twitter: {
-      card: image ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: resolvedTitle,
       description: resolvedDescription,
-      images: image ? [image] : undefined
+      images: [resolvedImage]
     }
   };
 }
@@ -68,7 +71,8 @@ export function courseSchema(course: { title: string; description: string | null
     provider: {
       "@type": "Organization",
       name: siteConfig.name,
-      sameAs: siteConfig.url
+      sameAs: siteConfig.url,
+      logo: absoluteUrl(siteConfig.logoPath)
     },
     offers: {
       "@type": "Offer",
@@ -88,7 +92,8 @@ export function productSchema(product: { title: string; description: string | nu
     url: absoluteUrl(`/products/${product.slug}`),
     brand: {
       "@type": "Brand",
-      name: siteConfig.name
+      name: siteConfig.name,
+      logo: absoluteUrl(siteConfig.logoPath)
     },
     offers: {
       "@type": "Offer",
