@@ -1,15 +1,24 @@
 import Link from "next/link";
+import type { Route } from "next";
+import type { LucideIcon } from "lucide-react";
 import { Bell, BookOpen, CalendarDays, CheckCircle2, FileCheck2, GraduationCap, LineChart, Receipt } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireOnboardedUser } from "@/lib/auth";
 import { firstRelation } from "@/lib/lms";
 import { getStudentDashboardSnapshot } from "@/lib/student-dashboard";
 
+interface DashboardCard {
+  href: Route;
+  label: string;
+  value: number;
+  icon: LucideIcon;
+}
+
 export default async function DashboardPage() {
   const { user } = await requireOnboardedUser();
   const snapshot = await getStudentDashboardSnapshot(user.id);
 
-  const cards = [
+  const cards: DashboardCard[] = [
     { href: "/dashboard/courses", label: "Enrolled courses", value: snapshot.stats.enrolledCourses, icon: BookOpen },
     { href: "/dashboard/batches", label: "Active batches", value: snapshot.stats.activeBatches, icon: CalendarDays },
     { href: "/dashboard/courses", label: "Lesson progress", value: snapshot.stats.lessonProgress, icon: LineChart },
@@ -45,7 +54,7 @@ export default async function DashboardPage() {
             {snapshot.lessons.length ? snapshot.lessons.slice(0, 5).map((lesson) => {
               const course = firstRelation(lesson.courses);
               return (
-                <Link key={lesson.id} href={`/dashboard/lessons/${lesson.id}`} className="grid gap-2 rounded-[1rem] border border-white/10 bg-white/[0.04] p-4 transition hover:bg-white/[0.08]">
+                <Link key={lesson.id} href={`/dashboard/lessons/${lesson.id}` as Route} className="grid gap-2 rounded-[1rem] border border-white/10 bg-white/[0.04] p-4 transition hover:bg-white/[0.08]">
                   <div className="flex items-center justify-between gap-3"><span className="font-bold text-white">{lesson.title}</span><span className="text-xs text-accent">{lesson.last_position_seconds}s</span></div>
                   <p className="text-sm text-muted-foreground">{course?.title ?? "Course lesson"}</p>
                 </Link>
