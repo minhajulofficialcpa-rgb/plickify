@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { PublicFooter } from "@/components/public/footer";
 import { PublicHeader } from "@/components/public/header";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,7 +23,7 @@ export default function AboutPage() {
             <h1 className="mt-5 text-5xl font-black text-white sm:text-6xl">A calm operating base for learning businesses.</h1>
             <p className="mt-6 text-lg leading-8 text-muted-foreground">Plickify brings LMS workflows and digital shop essentials together so course creators can teach, sell, support, and verify outcomes without scattering their work across disconnected tools.</p>
           </div>
-          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80" alt="Team planning an online education business" className="aspect-[4/3] w-full rounded-[1.25rem] object-cover" />
+          <Image src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80" alt="Team planning an online education business" width={1200} height={900} className="aspect-[4/3] w-full rounded-[1.25rem] object-cover" priority />
         </section>
         <section className="mt-12 grid gap-4 md:grid-cols-3">
           {values.map(([title, description]) => (
