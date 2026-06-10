@@ -102,8 +102,10 @@ begin
 end;
 $$;
 
-create policy if not exists analytics_events_admin_read on public.analytics_events
+drop policy if exists analytics_events_admin_read on public.analytics_events;
+create policy analytics_events_admin_read on public.analytics_events
 for select using (public.current_user_role() in ('admin', 'super_admin'));
 
-create policy if not exists analytics_events_secure_insert on public.analytics_events
+drop policy if exists analytics_events_secure_insert on public.analytics_events;
+create policy analytics_events_secure_insert on public.analytics_events
 for insert with check (auth.role() = 'service_role');
