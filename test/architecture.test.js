@@ -86,6 +86,34 @@ test('provides requested student dashboard routes', () => {
   assert.match(read('src/actions/student.ts'), /openProfileChangeTicketAction/);
 });
 
+test('provides requested admin dashboard routes and audited actions', () => {
+  for (const path of [
+    'src/app/admin/page.tsx',
+    'src/app/admin/users/page.tsx',
+    'src/app/admin/courses/page.tsx',
+    'src/app/admin/batches/page.tsx',
+    'src/app/admin/lessons/page.tsx',
+    'src/app/admin/products/page.tsx',
+    'src/app/admin/orders/page.tsx',
+    'src/app/admin/payments/page.tsx',
+    'src/app/admin/enrollments/page.tsx',
+    'src/app/admin/assignments/page.tsx',
+    'src/app/admin/tickets/page.tsx',
+    'src/app/admin/contacts/page.tsx',
+    'src/app/admin/reviews/page.tsx',
+    'src/app/admin/certificates/page.tsx',
+    'src/app/admin/audit-logs/page.tsx',
+    'src/app/admin/settings/page.tsx'
+  ]) {
+    assert.ok(existsSync(path), `${path} should exist`);
+  }
+
+  assert.match(read('src/actions/admin.ts'), /writeAuditEvent/);
+  assert.match(read('src/lib/audit.ts'), /audit_logs/);
+  assert.match(read('src/app/admin/audit-logs/page.tsx'), /requireSuperAdmin/);
+  assert.match(read('src/lib/admin-dashboard.ts'), /getAdminAnalytics/);
+});
+
 test('does not implement payment yet', () => {
   assert.equal(existsSync('src/app/api/piprapay'), false);
   assert.equal(existsSync('src/lib/payments'), false);
