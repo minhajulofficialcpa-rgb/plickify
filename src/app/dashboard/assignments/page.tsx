@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { FileCheck2 } from "lucide-react";
 import { submitAssignmentAction } from "@/actions/student";
 import { Button } from "@/components/ui/button";
@@ -39,7 +38,7 @@ export default async function DashboardAssignmentsPage() {
                   <div className="rounded-full border border-white/10 px-3 py-1 text-xs font-bold uppercase text-muted-foreground">{submission?.status ?? "not submitted"}</div>
                 </div>
                 {assignment.instructions ? <p className="mt-4 whitespace-pre-wrap text-sm text-muted-foreground">{assignment.instructions}</p> : null}
-                {assignment.attachment_url ? <Link href={assignment.attachment_url} className="mt-3 inline-flex text-sm font-semibold text-accent">Open attachment</Link> : null}
+                {assignment.attachment_url ? <a href={assignment.attachment_url} className="mt-3 inline-flex text-sm font-semibold text-accent">Open attachment</a> : null}
                 {submission ? (
                   <div className="mt-5 rounded-[1rem] border border-white/10 bg-white/[0.04] p-4 text-sm text-muted-foreground">
                     <p className="font-bold text-white">Submission result</p>
