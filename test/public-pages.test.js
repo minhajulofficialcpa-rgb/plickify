@@ -88,8 +88,8 @@ test('certificate and invoice verification use server-side lookup helpers', () =
   const certificatePage = read('src/app/certificate/verify/[code]/page.tsx');
   const invoicePage = read('src/app/invoice/verify/[code]/page.tsx');
 
-  assert.match(certificatePage, /verifyCertificateByCode/);
-  assert.match(certificatePage, /Valid certificate|Certificate not found/);
-  assert.match(invoicePage, /verifyInvoiceByCode/);
-  assert.match(invoicePage, /Valid invoice|Invoice not found/);
+  assert.match(certificatePage, /verifyCertificate/);
+  assert.match(certificatePage, /Certificate verified|Certificate not verified/);
+  assert.match(invoicePage, /verifyInvoice/);
+  assert.match(invoicePage, /Invoice verified|Invoice not verified/);
 });
