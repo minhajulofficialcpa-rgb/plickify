@@ -14,6 +14,7 @@ const links: AdminNavItem[] = [
   { href: "/admin/lessons", label: "Lessons", icon: Video },
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/orders", label: "Orders", icon: Receipt },
+  { href: "/admin/invoices", label: "Invoices", icon: Receipt },
   { href: "/admin/payments", label: "Payments", icon: BadgeDollarSign },
   { href: "/admin/enrollments", label: "Enrollments", icon: ShieldCheck },
   { href: "/admin/assignments", label: "Assignments", icon: ClipboardList },
