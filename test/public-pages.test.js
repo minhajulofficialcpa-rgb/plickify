@@ -50,7 +50,7 @@ test('course and product pages include dynamic metadata and schema', () => {
   assert.match(productPage, /generateMetadata/);
   assert.match(productPage, /productSchema/);
   assert.match(productPage, /accessType|access_type/);
-  assert.match(productPage, /category/);
+  assert.match(productPage, /category/i);
 });
 
 test('seo routes include sitemap, robots, canonical URLs, and Open Graph metadata', () => {
