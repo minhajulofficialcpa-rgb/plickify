@@ -83,7 +83,7 @@ test('provides requested student dashboard routes', () => {
 
   assert.match(read('src/components/player/lesson-player.tsx'), /setInterval\(sendHeartbeat, 10000\)/);
   assert.match(read('src/app/dashboard/profile/page.tsx'), /Open support ticket/);
-  assert.match(read('src/app/dashboard/downloads/page.tsx'), /signed URL/i);
+  assert.match(read('src/app/dashboard/downloads/page.tsx'), /5-minute signed/i);
   assert.match(read('src/actions/student.ts'), /openProfileChangeTicketAction/);
 });
 
@@ -140,6 +140,33 @@ test('implements assignment and support ticket workflows', () => {
   assert.match(adminAssignments, /Feedback/);
   assert.match(adminTickets, /updateTicketStatusAction/);
   assert.match(adminTickets, /replySupportTicketAsStaffAction/);
+});
+
+test('implements digital product shop access and downloads', () => {
+  const publicData = read('src/lib/public-data.ts');
+  const studentActions = read('src/actions/student.ts');
+  const adminActions = read('src/actions/admin.ts');
+  const shopPage = read('src/app/shop/page.tsx');
+  const productPage = read('src/app/products/[slug]/page.tsx');
+  const downloadsPage = read('src/app/dashboard/downloads/page.tsx');
+  const productManager = read('src/components/admin/product-manager.tsx');
+  const ordersPage = read('src/app/admin/orders/page.tsx');
+
+  assert.match(shopPage, /category=/);
+  assert.match(shopPage, /manual_service/);
+  assert.match(productPage, /startProductCheckoutAction/);
+  assert.match(productPage, /Request activation/);
+  assert.match(studentActions, /startProductCheckoutAction/);
+  assert.match(studentActions, /createDownloadUrlAction/);
+  assert.match(studentActions, /createSignedUrl\(privatePath, 60 \* 5\)/);
+  assert.match(studentActions, /download_count/);
+  assert.doesNotMatch(publicData, /select\("id, title, slug, description, file_path/);
+  assert.match(productManager, /Private file path/);
+  assert.match(productManager, /manual_service/);
+  assert.match(adminActions, /productMutationSchema/);
+  assert.match(adminActions, /updateOrderAccessAction/);
+  assert.match(ordersPage, /activationStatus/);
+  assert.match(downloadsPage, /Generate 5-minute link/);
 });
 
 test('does not implement payment yet', () => {
