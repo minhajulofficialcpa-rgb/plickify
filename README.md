@@ -29,6 +29,7 @@ SUPABASE_SERVICE_ROLE_KEY=
 - LMS course, batch, lesson, enrollment, student dashboard, and admin dashboard foundations.
 - Batch assignment submissions with admin review, marks, feedback, and notifications.
 - Threaded support tickets with priorities, attachments, staff replies, status updates, and notifications.
+- Assignment and support deployment verification is tracked through the production build.
 
 ## Scripts
 
