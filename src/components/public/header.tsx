@@ -12,7 +12,7 @@ const navItems = [
   { href: "/shop", label: "Shop" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" }
-] satisfies Array<{ href: Route; label: string }>;
+];
 
 export async function PublicHeader() {
   const [profile, role] = await Promise.all([getCurrentProfile(), getCurrentRole()]);
@@ -32,7 +32,7 @@ export async function PublicHeader() {
         </Link>
         <div className="hidden items-center gap-7 text-sm font-semibold text-muted-foreground md:flex">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="transition hover:text-foreground">{item.label}</Link>
+            <Link key={item.href} href={item.href as Route} className="transition hover:text-foreground">{item.label}</Link>
           ))}
         </div>
         <div className="flex items-center gap-2">
