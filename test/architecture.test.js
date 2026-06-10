@@ -63,6 +63,27 @@ test('provides required app placeholders and Supabase clients', () => {
   assert.match(read('src/lib/supabase/admin.ts'), /SUPABASE_SERVICE_ROLE_KEY/);
 });
 
+test('provides requested student dashboard routes', () => {
+  for (const path of [
+    'src/app/dashboard/page.tsx',
+    'src/app/dashboard/courses/page.tsx',
+    'src/app/dashboard/batches/page.tsx',
+    'src/app/dashboard/lessons/[lessonId]/page.tsx',
+    'src/app/dashboard/assignments/page.tsx',
+    'src/app/dashboard/orders/page.tsx',
+    'src/app/dashboard/downloads/page.tsx',
+    'src/app/dashboard/certificates/page.tsx',
+    'src/app/dashboard/support/page.tsx',
+    'src/app/dashboard/profile/page.tsx'
+  ]) {
+    assert.ok(existsSync(path), `${path} should exist`);
+  }
+
+  assert.match(read('src/components/player/lesson-player.tsx'), /setInterval\(sendHeartbeat, 10000\)/);
+  assert.match(read('src/app/dashboard/profile/page.tsx'), /Open support ticket/);
+  assert.match(read('src/app/dashboard/downloads/page.tsx'), /signed URL/i);
+});
+
 test('does not implement payment yet', () => {
   assert.equal(existsSync('src/app/api/piprapay'), false);
   assert.equal(existsSync('src/lib/payments'), false);
