@@ -20,6 +20,7 @@ export interface ActionState {
   message: string;
 }
 
+const initialState: ActionState = { ok: true, message: "" };
 const ok = (message: string): ActionState => ({ ok: true, message });
 const fail = (message: string): ActionState => ({ ok: false, message });
 
@@ -29,6 +30,21 @@ function nullableText(value: string | undefined) {
 
 function checkbox(value: FormDataEntryValue | null) {
   return value === "on" || value === "true";
+}
+
+export async function saveCourseFormAction(formData: FormData) {
+  const result = await saveCourseAction(initialState, formData);
+  if (!result.ok) throw new Error(result.message);
+}
+
+export async function saveBatchFormAction(formData: FormData) {
+  const result = await saveBatchAction(initialState, formData);
+  if (!result.ok) throw new Error(result.message);
+}
+
+export async function saveLessonFormAction(formData: FormData) {
+  const result = await saveLessonAction(initialState, formData);
+  if (!result.ok) throw new Error(result.message);
 }
 
 export async function saveCourseAction(_state: ActionState, formData: FormData): Promise<ActionState> {
