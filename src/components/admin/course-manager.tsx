@@ -1,3 +1,4 @@
+import type * as React from "react";
 import { Trash2 } from "lucide-react";
 import {
   deleteBatchAction,
