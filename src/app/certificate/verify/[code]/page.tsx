@@ -5,7 +5,8 @@ import { PublicHeader } from "@/components/public/header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createMetadata } from "@/lib/seo";
-import { formatDate, verifyCertificate } from "@/lib/public-data";
+import { formatDate } from "@/lib/public-data";
+import { verifyCertificate } from "@/lib/verification-data";
 
 export const metadata: Metadata = createMetadata({
   title: "Verify Certificate",
@@ -25,7 +26,7 @@ export default async function CertificateVerifyPage({ params }: PageProps) {
   return (
     <main className="min-h-screen bg-background">
       <PublicHeader />
-      <section className="mx-auto flex min-h-[72vh] max-w-3xl items-center px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto flex min-h-[72vh] max-w-4xl items-center px-4 py-16 sm:px-6 lg:px-8">
         <Card className="w-full border-white/10 bg-card/80">
           <CardHeader className="text-center">
             <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary/15 text-primary">
@@ -36,11 +37,19 @@ export default async function CertificateVerifyPage({ params }: PageProps) {
           </CardHeader>
           <CardContent className="space-y-6">
             {certificate ? (
-              <div className="grid gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:grid-cols-2">
-                <Info label="Certificate number" value={certificate.certificate_number} />
-                <Info label="Issued" value={formatDate(certificate.issued_at)} />
-                <Info label="Status" value={isValid ? "valid" : "revoked"} />
-                <Info label="Revoked" value={certificate.revoked_at ? formatDate(certificate.revoked_at) : "No"} />
+              <div className="grid gap-6 lg:grid-cols-[1fr_180px]">
+                <div className="grid gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:grid-cols-2">
+                  <Info label="Certificate number" value={certificate.certificate_number} />
+                  <Info label="Public code" value={certificate.certificate_code ?? certificate.verification_code} />
+                  <Info label="Student" value={certificate.student_name ?? "Plickify learner"} />
+                  <Info label="Course" value={certificate.course_title ?? "Plickify course"} />
+                  <Info label="Issued" value={formatDate(certificate.issued_at)} />
+                  <Info label="Status" value={isValid ? "valid" : "revoked"} />
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
+                  {certificate.qr_code_url ? <img src={certificate.qr_code_url} alt="Certificate verification QR code" className="mx-auto h-32 w-32 rounded-xl bg-white p-2" /> : null}
+                  <p className="mt-3 text-xs text-muted-foreground">Scan to verify this public certificate record.</p>
+                </div>
               </div>
             ) : (
               <p className="rounded-2xl border border-destructive/30 bg-destructive/10 p-5 text-sm text-muted-foreground">
