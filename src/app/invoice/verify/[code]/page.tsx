@@ -37,10 +37,10 @@ export default async function InvoiceVerifyPage({ params }: PageProps) {
           <CardContent className="space-y-6">
             {invoice ? (
               <div className="grid gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:grid-cols-2">
-                <Info label="Invoice number" value={invoice.invoiceNumber} />
-                <Info label="Customer" value={invoice.customerName} />
-                <Info label="Amount" value={formatBdt(invoice.amount)} />
-                <Info label="Issued" value={formatDate(invoice.issuedAt)} />
+                <Info label="Invoice number" value={invoice.invoice_number} />
+                <Info label="Amount" value={formatBdt(invoice.amount_bdt)} />
+                <Info label="Paid" value={formatDate(invoice.paid_at)} />
+                <Info label="Currency" value={invoice.currency} />
                 <Info label="Status" value={invoice.status} />
                 <Info label="Record" value="Authentic Plickify invoice" />
               </div>
