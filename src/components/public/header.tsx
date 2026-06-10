@@ -1,8 +1,7 @@
-import type { Route } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-const navItems: Array<{ href: Route; label: string }> = [
+const navItems = [
   { href: "/courses/digital-business-foundations", label: "Courses" },
   { href: "/shop", label: "Shop" },
   { href: "/about", label: "About" },
@@ -19,7 +18,7 @@ export function PublicHeader() {
         </Link>
         <div className="hidden items-center gap-7 text-sm font-semibold text-muted-foreground md:flex">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href}>{item.label}</Link>
+            <a key={item.href} href={item.href}>{item.label}</a>
           ))}
         </div>
         <Button asChild variant="accent"><Link href="/login">Sign in</Link></Button>
