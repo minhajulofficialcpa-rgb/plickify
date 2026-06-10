@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { HelpCircle, MessageSquareReply } from "lucide-react";
 import { openSupportTicketAction, replySupportTicketAction } from "@/actions/student";
 import { Button } from "@/components/ui/button";
@@ -49,7 +48,7 @@ export default async function DashboardSupportPage() {
                       <div key={message.id} className="rounded-[0.85rem] border border-white/10 bg-background/40 p-3 text-sm">
                         <p className="font-bold text-white">{message.sender_role === "student" ? "You" : "Support"}</p>
                         <p className="mt-1 whitespace-pre-wrap text-muted-foreground">{message.message}</p>
-                        {message.attachment_url ? <Link href={message.attachment_url} className="mt-2 inline-flex text-xs font-semibold text-accent">Open attachment</Link> : null}
+                        {message.attachment_url ? <a href={message.attachment_url} className="mt-2 inline-flex text-xs font-semibold text-accent">Open attachment</a> : null}
                       </div>
                     ))}
                   </div>
