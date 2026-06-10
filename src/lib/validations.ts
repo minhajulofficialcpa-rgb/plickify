@@ -9,7 +9,15 @@ export const onboardingSchema = z.object({
   phoneNumber: phoneNumberSchema
 });
 
+export const contactMessageSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  email: emailSchema,
+  subject: z.string().trim().max(160).optional(),
+  message: z.string().trim().min(10).max(5000)
+});
+
 export const profileSchema = onboardingSchema;
 
 export type OnboardingInput = z.infer<typeof onboardingSchema>;
 export type ProfileInput = z.infer<typeof profileSchema>;
+export type ContactMessageInput = z.infer<typeof contactMessageSchema>;
