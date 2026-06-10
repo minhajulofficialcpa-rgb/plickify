@@ -35,14 +35,22 @@ const requiredTables = [
   'abandoned_carts'
 ];
 
+function tableBlock(table) {
+  const start = sql.indexOf(`create table public.${table} (`);
+  assert.notEqual(start, -1, `${table} should be created`);
+  const end = sql.indexOf('\n);', start);
+  assert.notEqual(end, -1, `${table} create statement should close`);
+  return sql.slice(start, end);
+}
+
 test('phase 2 migration creates all requested LMS and shop tables with UUID primary keys', () => {
   for (const table of requiredTables) {
-    assert.ok(sql.includes(`create table public.${table} (`), `${table} should be created`);
-    assert.match(sql, new RegExp(`create table public\\.${table} \\([\\s\\S]*?id uuid primary key`, 'm'), `${table} should use a UUID primary key`);
-    assert.match(sql, new RegExp(`alter table public\\.${table} enable row level security`), `${table} should enable RLS`);
+    const block = tableBlock(table);
+    assert.match(block, /id uuid primary key/, `${table} should use a UUID primary key`);
+    assert.ok(sql.includes(`alter table public.${table} enable row level security`), `${table} should enable RLS`);
   }
 
-  assert.match(sql, /profiles \([\s\S]*id uuid primary key references auth\.users\(id\) on delete cascade/);
+  assert.match(tableBlock('profiles'), /id uuid primary key references auth\.users\(id\) on delete cascade/);
 });
 
 test('phase 2 migration defines status fields, unique constraints, and payment safeguards', () => {
