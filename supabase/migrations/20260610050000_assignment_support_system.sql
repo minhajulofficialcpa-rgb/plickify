@@ -80,7 +80,7 @@ create policy assignments_read on public.assignments for select using (
       from public.user_batches ub
       where ub.user_id = auth.uid()
         and ub.batch_id = assignments.batch_id
-        and coalesce(ub.status, ub.activation_status::text) = 'active'
+        and ub.activation_status = 'active'
     )
   )
 );
