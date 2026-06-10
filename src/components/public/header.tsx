@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
+const navItems = [
+  { href: "/courses/digital-business-foundations", label: "Courses" },
+  { href: "/shop", label: "Shop" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" }
+];
+
 export function PublicHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-background/75 backdrop-blur-xl">
@@ -10,10 +17,11 @@ export function PublicHeader() {
           Plickify
         </Link>
         <div className="hidden items-center gap-7 text-sm font-semibold text-muted-foreground md:flex">
-          <Link href="/dashboard">Dashboard</Link>
-          <Link href="/admin">Admin</Link>
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href}>{item.label}</Link>
+          ))}
         </div>
-        <Button asChild variant="accent"><Link href="/dashboard">Get started</Link></Button>
+        <Button asChild variant="accent"><Link href="/login">Sign in</Link></Button>
       </nav>
     </header>
   );
