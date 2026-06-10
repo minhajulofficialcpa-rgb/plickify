@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { requirePlatformAdmin } from "@/lib/auth";
 import { writeAuditEvent } from "@/lib/audit";
 import { hasSupabaseAdminEnv } from "@/lib/lms";
+import { createNotification } from "@/lib/notifications";
+import { writeServerAnalyticsEvent } from "@/lib/server-analytics";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 function ensureAdminEnv() {
@@ -29,14 +31,14 @@ function checkbox(formData: FormData, key: string) {
 
 async function notifyCertificate(userId: string, certificateId: string | null | undefined, revoked = false) {
   if (!certificateId) return;
-  const supabase = ensureAdminEnv();
-  await supabase.from("notifications").insert({
-    user_id: userId,
+  await createNotification({
+    userId,
     title: revoked ? "Certificate revoked" : "Certificate issued",
     body: revoked ? "A certificate was revoked by admin." : "Your certificate is available in your dashboard.",
-    action_url: "/dashboard/certificates",
-    related_type: "certificate",
-    related_id: certificateId
+    actionUrl: "/dashboard/certificates",
+    eventType: "certificate_issued",
+    relatedType: "certificate",
+    relatedId: certificateId
   });
 }
 
@@ -70,6 +72,7 @@ export async function issueCertificateAction(formData: FormData) {
     metadata: { userId, courseId, manualOverride, manualReason }
   });
   await notifyCertificate(userId, certificateId);
+  await writeServerAnalyticsEvent({ userId, eventName: "certificate_claim", path: "/dashboard/certificates", entityType: "certificate", entityId: certificateId, metadata: { courseId, manualOverride } });
   revalidatePath("/admin/certificates");
   revalidatePath("/dashboard/certificates");
 }
