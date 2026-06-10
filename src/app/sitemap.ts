@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getPublishedCourses, getPublishedProducts } from "@/lib/public-data";
-import { absoluteUrl, siteConfig } from "@/lib/seo";
+import { absoluteUrl } from "@/lib/seo";
 
 const staticPaths = [
   "/",
@@ -49,5 +49,3 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }));
 }
-
-export const dynamic = siteConfig.url.includes("localhost") ? "force-dynamic" : "auto";
