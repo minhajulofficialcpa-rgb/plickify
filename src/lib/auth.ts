@@ -80,6 +80,12 @@ export async function requireAdmin() {
   return auth;
 }
 
+export async function requirePlatformAdmin() {
+  const auth = await requireOnboardedUser();
+  if (auth.role !== "admin" && auth.role !== "super_admin") redirect("/admin");
+  return auth;
+}
+
 export async function requireSupportModerator() {
   const auth = await requireOnboardedUser();
   if (!canModerateSupport(auth.role)) redirect("/dashboard");
