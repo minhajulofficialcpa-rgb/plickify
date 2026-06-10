@@ -82,6 +82,7 @@ test('provides requested student dashboard routes', () => {
   assert.match(read('src/components/player/lesson-player.tsx'), /setInterval\(sendHeartbeat, 10000\)/);
   assert.match(read('src/app/dashboard/profile/page.tsx'), /Open support ticket/);
   assert.match(read('src/app/dashboard/downloads/page.tsx'), /signed URL/i);
+  assert.match(read('src/actions/student.ts'), /openProfileChangeTicketAction/);
 });
 
 test('does not implement payment yet', () => {
