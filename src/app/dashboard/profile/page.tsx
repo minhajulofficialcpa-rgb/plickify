@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
 import { Lock, Mail, Phone, User } from "lucide-react";
 import { openProfileChangeTicketAction } from "@/actions/student";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,6 @@ export default async function DashboardProfilePage() {
   );
 }
 
-function Info({ icon: Icon, label, value }: { icon: typeof User; label: string; value: string }) {
+function Info({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
   return <div className="flex items-center gap-3 rounded-[1rem] border border-white/10 bg-white/[0.04] p-4"><Icon className="h-4 w-4 text-accent" /><div><p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{label}</p><p className="font-semibold text-white">{value}</p></div></div>;
 }
