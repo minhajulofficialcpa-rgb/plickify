@@ -104,7 +104,7 @@ $$;
 
 drop policy if exists analytics_events_admin_read on public.analytics_events;
 create policy analytics_events_admin_read on public.analytics_events
-for select using (public.current_user_role() in ('admin', 'super_admin'));
+for select using (public.has_admin_role('admin'));
 
 drop policy if exists analytics_events_secure_insert on public.analytics_events;
 create policy analytics_events_secure_insert on public.analytics_events
