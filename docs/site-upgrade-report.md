@@ -1,6 +1,6 @@
 # Plickify Site Upgrade Report
 
-Date: 2026-06-10
+Date: 2026-06-11
 
 ## Executive Summary
 
@@ -24,6 +24,8 @@ The remaining work is mostly product-depth, polish, QA, and operational setup. P
 - Light-default premium UI token pass.
 - Auth-aware public header.
 - Left-side dashboard/admin navigation panels.
+- Light/dark theme toggle with persisted browser preference.
+- Active navigation states for dashboard/admin sidebars.
 
 ## Fixed In This Upgrade Pass
 
@@ -31,15 +33,20 @@ The remaining work is mostly product-depth, polish, QA, and operational setup. P
 - Header no longer always shows only Sign in; authenticated users see Dashboard/Profile and admins see Admin.
 - Student dashboard menu is now a left-side panel on desktop.
 - Admin menu is now a left-side panel on desktop.
+- Dashboard and admin navigation now show active route state.
+- A reusable public theme toggle is available in public, dashboard, and admin shells.
 - Base button/card components are light/dark compatible.
+- Vercel build warning from the old `b6d653d` deployment was fixed by removing the unused `Video` import from `src/components/dashboard/dashboard-shell.tsx`.
+
+## Current Vercel Note
+
+If Vercel shows a build for commit `b6d653d`, that is an old redeploy and it will still show the unused `Video` warning. Deploy the latest `main` commit instead; the current `main` version of `src/components/dashboard/dashboard-shell.tsx` no longer imports `Video`.
 
 ## Remaining Gaps
 
 ### UI/UX Polish
 
-- Add an actual light/dark toggle and persist preference.
 - Replace remaining hard-coded dark utility classes across all pages.
-- Add active navigation states for dashboard/admin sidebars.
 - Improve mobile drawer navigation for dashboard/admin instead of horizontal overflow.
 - Add richer empty states and loading skeletons per data-heavy page.
 - Add branded Open Graph image generation.
@@ -76,11 +83,10 @@ The remaining work is mostly product-depth, polish, QA, and operational setup. P
 
 ## Recommended Build Order
 
-1. Finish theme system: toggle, active nav states, remove hard-coded dark styles.
-2. Browser QA public pages and fix visual bugs.
-3. Browser QA student dashboard and fix workflow bugs.
-4. Browser QA admin dashboard and fix CRUD/form bugs.
-5. Apply and verify Supabase migrations in production.
-6. Add storage bucket policies and test signed downloads end-to-end.
-7. Add certificate/invoice PDF generation.
-8. Add payment checkout only when payment phase starts.
+1. Browser QA public pages and fix visual bugs.
+2. Browser QA student dashboard and fix workflow bugs.
+3. Browser QA admin dashboard and fix CRUD/form bugs.
+4. Apply and verify Supabase migrations in production.
+5. Add storage bucket policies and test signed downloads end-to-end.
+6. Add certificate/invoice PDF generation.
+7. Add payment checkout only when payment phase starts.
