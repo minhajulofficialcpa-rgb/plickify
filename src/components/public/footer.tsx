@@ -1,11 +1,12 @@
+import type { Route } from "next";
 import Link from "next/link";
 
-const policyLinks = [
-  ["Privacy", "/privacy-policy"],
-  ["Terms", "/terms-and-conditions"],
-  ["Refunds", "/refund-policy"],
-  ["Cookies", "/cookie-policy"],
-  ["Copyright", "/copyright-policy"]
+const policyLinks: Array<{ label: string; href: Route }> = [
+  { label: "Privacy", href: "/privacy-policy" },
+  { label: "Terms", href: "/terms-and-conditions" },
+  { label: "Refunds", href: "/refund-policy" },
+  { label: "Cookies", href: "/cookie-policy" },
+  { label: "Copyright", href: "/copyright-policy" }
 ];
 
 export function PublicFooter() {
@@ -19,8 +20,8 @@ export function PublicFooter() {
           </p>
         </div>
         <div className="flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold text-muted-foreground md:justify-end">
-          {policyLinks.map(([label, href]) => (
-            <Link key={href} href={href}>{label}</Link>
+          {policyLinks.map((item) => (
+            <Link key={item.href} href={item.href}>{item.label}</Link>
           ))}
         </div>
       </div>
