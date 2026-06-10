@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AnalyticsScripts } from "@/components/analytics/analytics-scripts";
 import { siteConfig } from "@/lib/seo";
 import "./globals.css";
 
@@ -22,7 +23,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <AnalyticsScripts />
+      </body>
     </html>
   );
 }
