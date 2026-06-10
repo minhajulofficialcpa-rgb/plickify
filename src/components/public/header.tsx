@@ -1,7 +1,8 @@
+import type { Route } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-const navItems = [
+const navItems: Array<{ href: Route; label: string }> = [
   { href: "/courses/digital-business-foundations", label: "Courses" },
   { href: "/shop", label: "Shop" },
   { href: "/about", label: "About" },
