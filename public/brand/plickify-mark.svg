@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Plickify</title>
+  <desc id="desc">Plickify circular favicon mark with deep navy, cyan, blue, and violet brand colors.</desc>
+  <defs>
+    <linearGradient id="rim" x1="38" y1="44" x2="462" y2="474" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#13d7ff"/>
+      <stop offset="0.52" stop-color="#1389ff"/>
+      <stop offset="1" stop-color="#a933ff"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="184" y1="92" x2="346" y2="326" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22e6ff"/>
+      <stop offset="0.5" stop-color="#0aa8ff"/>
+      <stop offset="1" stop-color="#1557ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#ffffff"/>
+  <circle cx="256" cy="256" r="236" fill="url(#rim)"/>
+  <circle cx="256" cy="256" r="218" fill="#020c38"/>
+  <path fill="url(#mark)" d="M202 87h94c58 0 105 46 105 102 0 57-47 103-105 103h-32v-50h32c30 0 55-24 55-53 0-30-25-53-55-53h-94z"/>
+  <path fill="#ffffff" d="M202 138h90c36 0 65 28 65 62s-29 63-65 63h-31v-50h31c8 0 15-6 15-13s-7-13-15-13h-90z"/>
+  <path fill="url(#mark)" d="M202 187h60c37 0 65 28 65 62 0 35-28 63-65 63h-12v-50h12c8 0 15-6 15-13s-7-13-15-13h-10v90c0 18-14 32-32 32h-18z"/>
+  <rect x="163" y="98" width="13" height="13" fill="#70f0ff"/>
+  <rect x="178" y="116" width="15" height="15" fill="#16caff"/>
+  <rect x="153" y="134" width="21" height="21" fill="#0aa8ff"/>
+  <rect x="136" y="160" width="14" height="14" fill="#4367ff"/>
+  <rect x="180" y="166" width="14" height="14" fill="#3858ff"/>
+  <rect x="157" y="184" width="21" height="21" fill="#7138ff"/>
+  <text x="256" y="422" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="76" font-weight="800" fill="#ffffff">Plickify</text>
+</svg>
