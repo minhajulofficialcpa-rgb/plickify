@@ -14,8 +14,7 @@ alter table public.course_lessons
   add column if not exists is_locked boolean not null default false;
 
 alter table public.enrollments
-  add column if not exists batch_id uuid references public.batches(id) on delete set null,
-  add column if not exists activation_status text not null default 'pending';
+  add column if not exists batch_id uuid references public.batches(id) on delete set null;
 
 alter table public.user_batches
   add column if not exists course_id uuid references public.courses(id) on delete cascade,
@@ -30,7 +29,8 @@ alter table public.watch_analytics
 
 alter table public.enrollments
   drop constraint if exists enrollments_activation_status_check,
-  add constraint enrollments_activation_status_check check (activation_status in ('pending', 'active', 'inactive', 'revoked'));
+  add constraint enrollments_activation_status_check
+    check (activation_status in ('pending', 'active', 'paused', 'completed', 'cancelled'));
 
 alter table public.course_lessons
   drop constraint if exists course_lessons_position_positive_check,
@@ -66,23 +66,38 @@ security definer
 set search_path = public
 as $$
 begin
-  if new.status = 'active' and (tg_op = 'INSERT' or old.status is distinct from new.status or old.batch_id is distinct from new.batch_id) then
+  if new.activation_status = 'active'
+     and (
+       tg_op = 'INSERT'
+       or old.activation_status is distinct from new.activation_status
+       or old.batch_id is distinct from new.batch_id
+     ) then
     update public.enrollments
-      set activation_status = 'active', updated_at = now()
-      where id = new.id and activation_status is distinct from 'active';
+      set activated_at = coalesce(activated_at, now()), updated_at = now()
+      where id = new.id;
 
     if new.batch_id is not null then
-      insert into public.user_batches (user_id, course_id, batch_id, status, created_at, updated_at)
-      values (new.user_id, new.course_id, new.batch_id, 'active', now(), now())
-      on conflict (user_id, batch_id) where batch_id is not null
-      do update set status = 'active', course_id = excluded.course_id, updated_at = now();
+      insert into public.user_batches (user_id, course_id, batch_id, enrollment_id, activation_status, status, created_at, updated_at)
+      values (new.user_id, new.course_id, new.batch_id, new.id, 'active', 'active', now(), now())
+      on conflict on constraint user_batches_user_batch_unique
+      do update set
+        enrollment_id = excluded.enrollment_id,
+        activation_status = 'active',
+        status = 'active',
+        course_id = excluded.course_id,
+        updated_at = now();
     else
-      insert into public.user_batches (user_id, course_id, batch_id, status, created_at, updated_at)
-      select new.user_id, b.course_id, b.id, 'active', now(), now()
+      insert into public.user_batches (user_id, course_id, batch_id, enrollment_id, activation_status, status, created_at, updated_at)
+      select new.user_id, b.course_id, b.id, new.id, 'active', 'active', now(), now()
       from public.batches b
       where b.course_id = new.course_id and b.status in ('enrolling', 'active')
-      on conflict (user_id, batch_id) where batch_id is not null
-      do update set status = 'active', course_id = excluded.course_id, updated_at = now();
+      on conflict on constraint user_batches_user_batch_unique
+      do update set
+        enrollment_id = excluded.enrollment_id,
+        activation_status = 'active',
+        status = 'active',
+        course_id = excluded.course_id,
+        updated_at = now();
     end if;
   end if;
 
@@ -92,7 +107,7 @@ $$;
 
 drop trigger if exists enrollments_allocate_active_user_batches on public.enrollments;
 create trigger enrollments_allocate_active_user_batches
-after insert or update of status, batch_id on public.enrollments
+after insert or update of activation_status, batch_id on public.enrollments
 for each row execute function public.allocate_active_enrollment_to_user_batches();
 
 create or replace function public.increment_watch_heartbeat()
@@ -128,13 +143,14 @@ declare
 begin
   record_id := coalesce(new.id, old.id);
 
-  insert into public.audit_logs(actor_id, action, entity_type, entity_id, metadata, created_at)
+  insert into public.audit_logs(actor_id, action, table_name, record_id, old_data, new_data, created_at)
   values (
     actor,
     lower(tg_table_name) || '.' || lower(tg_op),
     tg_table_name,
     record_id,
-    jsonb_build_object('old', to_jsonb(old), 'new', to_jsonb(new)),
+    case when tg_op in ('UPDATE', 'DELETE') then to_jsonb(old) else null end,
+    case when tg_op in ('INSERT', 'UPDATE') then to_jsonb(new) else null end,
     now()
   );
 
