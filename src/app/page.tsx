@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MessageSquare, Sparkles } from "lucide-react";
 import { PublicFooter } from "@/components/public/footer";
@@ -32,7 +33,7 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/[0.05]">
-            <img src={featuredCourse.thumbnail_url ?? "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"} alt="Online course workspace" className="aspect-[4/3] w-full object-cover" />
+            <Image src={featuredCourse.thumbnail_url ?? "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"} alt="Online course workspace" width={1200} height={900} className="aspect-[4/3] w-full object-cover" priority />
             <div className="grid gap-2 p-5">
               <span className="text-sm font-semibold text-accent">{formatBdt(featuredCourse.price_bdt)}</span>
               <p className="text-sm leading-6 text-muted-foreground">Cohort learning, curriculum previews, and digital resources in one focused learning space.</p>
