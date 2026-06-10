@@ -21,7 +21,7 @@ export function hasRole(userRole: UserRole | undefined, requiredRole: UserRole) 
 }
 
 export function canAccessAdmin(userRole: UserRole | undefined) {
-  return userRole === "admin" || userRole === "super_admin";
+  return canManageContent(userRole) || userRole === "admin" || userRole === "super_admin";
 }
 
 export function canManageContent(userRole: UserRole | undefined) {
