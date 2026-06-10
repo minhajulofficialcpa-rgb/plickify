@@ -45,18 +45,24 @@ export interface OrderSummary {
   order_number: string | null;
   status: string;
   payment_status: string | null;
+  activation_status: string | null;
+  access_type: string | null;
+  item_type: string | null;
   total_bdt: number | null;
   created_at: string;
+  products?: { title: string; category: string | null } | Array<{ title: string; category: string | null }> | null;
 }
 
 export interface DownloadSummary {
   id: string;
   product_id: string | null;
-  file_path: string | null;
+  order_id: string | null;
+  status: string | null;
   download_count: number | null;
+  max_downloads: number | null;
   expires_at: string | null;
-  products?: { title: string; file_path: string | null } | Array<{ title: string; file_path: string | null }> | null;
-  signedUrl?: string | null;
+  last_downloaded_at: string | null;
+  products?: { title: string; category: string | null } | Array<{ title: string; category: string | null }> | null;
 }
 
 export interface CertificateSummary {
@@ -181,28 +187,12 @@ export async function getStudentAssignments(userId: string) {
 
 export async function getStudentOrders(userId: string) {
   const supabase = await createClient();
-  return readList<OrderSummary>(supabase.from("orders").select("id, order_number, status, payment_status, total_bdt, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(25));
+  return readList<OrderSummary>(supabase.from("orders").select("id, order_number, status, payment_status, activation_status, access_type, item_type, total_bdt, created_at, products(title, category)").eq("user_id", userId).order("created_at", { ascending: false }).limit(25));
 }
 
 export async function getStudentDownloads(userId: string) {
   const supabase = await createClient();
-  const rows = await readList<DownloadSummary>(supabase.from("downloads").select("id, product_id, file_path, download_count, expires_at, products(title, file_path)").eq("user_id", userId).order("created_at", { ascending: false }).limit(25));
-
-  const bucket = process.env.SUPABASE_DOWNLOADS_BUCKET ?? "downloads";
-  return Promise.all(rows.map(async (row) => {
-    const product = firstRelation(row.products);
-    const path = row.file_path ?? product?.file_path ?? null;
-    if (!path) return { ...row, signedUrl: null };
-
-    try {
-      const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 10);
-      if (error) throw new Error(error.message);
-      return { ...row, signedUrl: data.signedUrl };
-    } catch (error) {
-      logReadError(error);
-      return { ...row, signedUrl: null };
-    }
-  }));
+  return readList<DownloadSummary>(supabase.from("downloads").select("id, product_id, order_id, status, download_count, max_downloads, expires_at, last_downloaded_at, products(title, category)").eq("user_id", userId).eq("status", "active").order("created_at", { ascending: false }).limit(25));
 }
 
 export async function getStudentCertificates(userId: string) {
