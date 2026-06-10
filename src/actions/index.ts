@@ -3,7 +3,9 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireSuperAdmin } from "@/lib/auth";
+import { createNotification } from "@/lib/notifications";
 import type { AssignableRole } from "@/lib/role-management";
+import { writeServerAnalyticsEvent } from "@/lib/server-analytics";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { contactMessageSchema, onboardingSchema } from "@/lib/validations";
@@ -53,6 +55,7 @@ export async function submitContactMessageAction(formData: FormData) {
   });
 
   if (error) throw new Error(error.message);
+  await writeServerAnalyticsEvent({ eventName: "Lead", path: "/contact", entityType: "contact_message", metadata: { email: payload.email, subject: payload.subject ?? null } });
   redirect("/contact?sent=1");
 }
 
@@ -64,6 +67,7 @@ export async function completeOnboardingAction(formData: FormData) {
   });
 
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
   const { error } = await supabase.rpc("complete_profile_onboarding", {
     profile_full_name: payload.fullName,
     profile_email: payload.email,
@@ -71,6 +75,18 @@ export async function completeOnboardingAction(formData: FormData) {
   });
 
   if (error) throw new Error(error.message);
+  if (user) {
+    await createNotification({
+      userId: user.id,
+      title: "Onboarding complete",
+      body: "Your locked student profile is ready.",
+      actionUrl: "/dashboard/profile",
+      eventType: "onboarding_complete",
+      relatedType: "profile",
+      relatedId: user.id
+    });
+    await writeServerAnalyticsEvent({ userId: user.id, eventName: "signup_complete", path: "/onboarding", entityType: "profile", entityId: user.id });
+  }
   redirect("/dashboard");
 }
 
