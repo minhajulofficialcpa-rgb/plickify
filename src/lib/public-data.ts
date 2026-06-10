@@ -10,6 +10,7 @@ export interface PublicCourse {
   thumbnail_url: string | null;
   price_bdt: number;
   published_at: string | null;
+  is_featured?: boolean | null;
   batches?: PublicBatch[];
   lessons?: PublicLesson[];
   reviews?: PublicReview[];
@@ -74,6 +75,7 @@ const fallbackCourses: PublicCourse[] = [
     thumbnail_url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
     price_bdt: 4500,
     published_at: new Date().toISOString(),
+    is_featured: true,
     batches: [
       {
         id: "batch-foundations",
@@ -100,7 +102,8 @@ const fallbackCourses: PublicCourse[] = [
     description: "Launch a focused digital shop with product pages, delivery rules, and customer support.",
     thumbnail_url: "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=1200&q=80",
     price_bdt: 3200,
-    published_at: new Date().toISOString()
+    published_at: new Date().toISOString(),
+    is_featured: false
   }
 ];
 
@@ -152,7 +155,7 @@ export async function getPublishedCourses(limit = 12): Promise<PublicCourse[]> {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("courses")
-      .select("id, title, slug, description, thumbnail_url, price_bdt, published_at")
+      .select("id, title, slug, description, thumbnail_url, price_bdt, published_at, is_featured")
       .eq("status", "published")
       .order("published_at", { ascending: false })
       .limit(limit);
@@ -166,6 +169,25 @@ export async function getPublishedCourses(limit = 12): Promise<PublicCourse[]> {
 }
 
 export async function getFeaturedCourse() {
+  if (!hasSupabasePublicEnv()) return fallbackCourses.find((course) => course.is_featured) ?? fallbackCourses[0];
+
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("courses")
+      .select("id, title, slug, description, thumbnail_url, price_bdt, published_at, is_featured")
+      .eq("status", "published")
+      .eq("is_featured", true)
+      .order("published_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw new Error(error.message);
+    if (data) return data as PublicCourse;
+  } catch (error) {
+    console.warn(formatErrorSafe(error));
+  }
+
   const courses = await getPublishedCourses(1);
   return courses[0] ?? fallbackCourses[0];
 }
@@ -178,7 +200,7 @@ export async function getCourseBySlug(slug: string): Promise<PublicCourse | null
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("courses")
-      .select("id, title, slug, description, thumbnail_url, price_bdt, published_at")
+      .select("id, title, slug, description, thumbnail_url, price_bdt, published_at, is_featured")
       .eq("slug", slug)
       .eq("status", "published")
       .maybeSingle();
