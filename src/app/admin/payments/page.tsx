@@ -1,0 +1,7 @@
+import { AdminPageHeader, AdminSection, AdminTable, StatusBadge } from "@/components/admin/admin-resource-page";
+import { formatBdt, getAdminPayments } from "@/lib/admin-dashboard";
+
+export default async function AdminPaymentsPage() {
+  const { payments, webhookLogs } = await getAdminPayments();
+  return <div><AdminPageHeader eyebrow="Payments" title="Payments" description="View PipraPay payment rows and webhook delivery logs." /><div className="mt-8 grid gap-6"><AdminSection title="Payments"><AdminTable rows={payments} emptyLabel="No payments found." columns={[{ header: "Provider", cell: (row) => row.provider ?? "PipraPay" }, { header: "Transaction", cell: (row) => row.transaction_id ?? "-" }, { header: "Status", cell: (row) => <StatusBadge value={row.status} /> }, { header: "Amount", cell: (row) => formatBdt(row.amount_bdt) }, { header: "Created", cell: (row) => new Date(row.created_at).toLocaleString("en-BD") }]} /></AdminSection><AdminSection title="Webhook logs"><AdminTable rows={webhookLogs} emptyLabel="No webhook logs found." columns={[{ header: "Provider", cell: (row) => row.provider ?? "PipraPay" }, { header: "Transaction", cell: (row) => row.transaction_id ?? "-" }, { header: "Event", cell: (row) => row.event_type ?? "webhook" }, { header: "Status", cell: (row) => <StatusBadge value={row.status} /> }, { header: "Created", cell: (row) => new Date(row.created_at).toLocaleString("en-BD") }]} /></AdminSection></div></div>;
+}
