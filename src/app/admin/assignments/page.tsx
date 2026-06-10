@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { saveAssignmentAction, updateAssignmentSubmissionAction } from "@/actions/admin";
 import { Button } from "@/components/ui/button";
 import { AdminPageHeader, AdminSection, AdminTable, Field, HiddenId, Select, StatusBadge, Textarea } from "@/components/admin/admin-resource-page";
@@ -33,14 +32,14 @@ export default async function AdminAssignmentsPage() {
             { header: "Deadline", cell: (row) => row.due_at ? new Date(row.due_at).toLocaleString("en-BD") : "-" },
             { header: "Max", cell: (row) => row.max_marks ?? row.max_score ?? 100 },
             { header: "Status", cell: (row) => <StatusBadge value={row.status} /> },
-            { header: "Attachment", cell: (row) => row.attachment_url ? <Link href={row.attachment_url} className="text-accent">Open</Link> : "-" }
+            { header: "Attachment", cell: (row) => row.attachment_url ? <a href={row.attachment_url} className="text-accent">Open</a> : "-" }
           ]} />
         </AdminSection>
 
         <AdminSection title="Submissions">
           <AdminTable rows={submissions} emptyLabel="No submissions found." columns={[
             { header: "Submission", cell: (row) => <div><p className="font-bold text-white">{firstAdminRelation(row.assignments)?.title ?? row.assignment_id}</p><p>{firstAdminRelation(row.profiles)?.email ?? row.user_id}</p></div> },
-            { header: "Content", cell: (row) => <div className="max-w-xs"><p className="line-clamp-3">{row.submission_text ?? "-"}</p>{row.submission_url ? <Link href={row.submission_url} className="text-accent">URL</Link> : null} {row.github_url ? <Link href={row.github_url} className="ml-2 text-accent">GitHub</Link> : null} {row.attachment_url ? <Link href={row.attachment_url} className="ml-2 text-accent">File</Link> : null}</div> },
+            { header: "Content", cell: (row) => <div className="max-w-xs"><p className="line-clamp-3">{row.submission_text ?? "-"}</p>{row.submission_url ? <a href={row.submission_url} className="text-accent">URL</a> : null} {row.github_url ? <a href={row.github_url} className="ml-2 text-accent">GitHub</a> : null} {row.attachment_url ? <a href={row.attachment_url} className="ml-2 text-accent">File</a> : null}</div> },
             { header: "Status", cell: (row) => <StatusBadge value={row.status} /> },
             { header: "Marks", cell: (row) => row.marks ?? row.score ?? "-" },
             { header: "Review", cell: (row) => <form action={updateAssignmentSubmissionAction} className="grid min-w-48 gap-2"><HiddenId id={row.id} /><Select label="Status" name="status" options={["submitted", "graded", "returned", "late"]} /><Field label="Marks" name="marks" type="number" required={false} /><Textarea label="Feedback" name="feedback" /><Button type="submit" size="sm" variant="accent">Review</Button></form> }
