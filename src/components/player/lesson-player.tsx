@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Pause, Play, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { trackGaEvent } from "@/lib/analytics";
 
 interface LessonPlayerProps {
   lessonId: string;
@@ -23,7 +24,14 @@ export function LessonPlayer({ lessonId, title, embedUrl, initialPositionSeconds
   const [isPlaying, setIsPlaying] = useState(false);
   const [position, setPosition] = useState(initialPositionSeconds);
   const lastSentRef = useRef(initialPositionSeconds);
+  const lastProgressEventRef = useRef(0);
+  const completedEventSentRef = useRef(false);
   const startedAt = useMemo(() => Date.now(), []);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    trackGaEvent("lesson_start", { lesson_id: lessonId, lesson_title: title, position_seconds: position });
+  }, [isPlaying, lessonId, position, title]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -33,6 +41,19 @@ export function LessonPlayer({ lessonId, title, embedUrl, initialPositionSeconds
 
     return () => window.clearInterval(timer);
   }, [durationSeconds, isPlaying]);
+
+  useEffect(() => {
+    const progressPercent = durationSeconds ? Math.round((position / durationSeconds) * 100) : 0;
+    if (progressPercent >= lastProgressEventRef.current + 25 && progressPercent < 100) {
+      lastProgressEventRef.current = progressPercent;
+      trackGaEvent("lesson_progress", { lesson_id: lessonId, lesson_title: title, progress_percent: progressPercent });
+    }
+
+    if (durationSeconds > 0 && position >= durationSeconds - 5 && !completedEventSentRef.current) {
+      completedEventSentRef.current = true;
+      trackGaEvent("lesson_complete", { lesson_id: lessonId, lesson_title: title, progress_percent: 100 });
+    }
+  }, [durationSeconds, lessonId, position, title]);
 
   useEffect(() => {
     const sendHeartbeat = async () => {
