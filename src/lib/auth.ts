@@ -1,7 +1,7 @@
 import "server-only";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { canAccessAdmin, canManageRoles, isUserRole, type UserRole } from "@/lib/permissions";
+import { canAccessAdmin, canManageRoles, canModerateSupport, isUserRole, type UserRole } from "@/lib/permissions";
 
 export interface ProfileRecord {
   id: string;
@@ -77,6 +77,12 @@ export async function requireOnboardedUser(): Promise<AuthContext> {
 export async function requireAdmin() {
   const auth = await requireOnboardedUser();
   if (!canAccessAdmin(auth.role)) redirect("/dashboard");
+  return auth;
+}
+
+export async function requireSupportModerator() {
+  const auth = await requireOnboardedUser();
+  if (!canModerateSupport(auth.role)) redirect("/dashboard");
   return auth;
 }
 
