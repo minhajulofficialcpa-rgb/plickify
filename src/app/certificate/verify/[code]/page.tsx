@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Award, ShieldCheck, XCircle } from "lucide-react";
+import { ShieldCheck, XCircle } from "lucide-react";
 import { PublicFooter } from "@/components/public/footer";
 import { PublicHeader } from "@/components/public/header";
 import { Button } from "@/components/ui/button";
