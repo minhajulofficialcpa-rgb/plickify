@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Route } from "next";
 import { CalendarDays } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireOnboardedUser } from "@/lib/auth";
@@ -30,7 +31,7 @@ export default async function DashboardBatchesPage() {
               <div className="grid gap-2 px-6 pb-6 text-sm text-muted-foreground">
                 <span>Status: {row.status}</span>
                 <span>Starts: {formatDate(batch?.starts_at)}</span>
-                {course ? <Link href={`/dashboard/courses/${course.id}`} className="font-semibold text-accent">Open course</Link> : null}
+                {course ? <Link href={`/dashboard/courses/${course.id}` as Route} className="font-semibold text-accent">Open course</Link> : null}
               </div>
             </Card>
           );
