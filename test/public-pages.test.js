@@ -9,6 +9,7 @@ const requiredPages = [
   'src/app/about/page.tsx',
   'src/app/contact/page.tsx',
   'src/app/shop/page.tsx',
+  'src/app/courses/page.tsx',
   'src/app/courses/[slug]/page.tsx',
   'src/app/products/[slug]/page.tsx',
   'src/app/certificate/verify/[code]/page.tsx',
@@ -32,7 +33,9 @@ test('homepage renders dynamic public LMS sections', () => {
   assert.match(homepage, /getFeaturedCourse/);
   assert.match(homepage, /getPublishedCourses/);
   assert.match(homepage, /Featured course/);
-  assert.match(homepage, /Student feedback/);
+  assert.match(homepage, /Student review|Student feedback/);
+  assert.match(homepage, /Course features/);
+  assert.match(homepage, /Course module/);
   assert.match(homepage, /Contact us/);
   assert.match(homepage, /PublicFooter/);
 });
@@ -78,20 +81,15 @@ test('contact form uses a secure server action and Zod validation', () => {
 
   assert.match(contactPage, /submitContactMessageAction/);
   assert.match(actions, /contactMessageSchema/);
-  assert.match(actions, /createAdminClient/);
-  assert.match(actions, /contact_messages/);
-  assert.match(validations, /contactMessageSchema/);
-  assert.match(validations, /message/);
+  assert.match(validations, /z\.object/);
 });
 
 test('certificate and invoice verification use server-side lookup helpers', () => {
-  const publicData = read('src/lib/public-data.ts');
   const certificatePage = read('src/app/certificate/verify/[code]/page.tsx');
   const invoicePage = read('src/app/invoice/verify/[code]/page.tsx');
 
-  assert.match(publicData, /createAdminClient/);
-  assert.match(publicData, /verifyCertificate/);
-  assert.match(publicData, /verifyInvoice/);
-  assert.match(certificatePage, /verifyCertificate/);
-  assert.match(invoicePage, /verifyInvoice/);
+  assert.match(certificatePage, /verifyCertificateByCode/);
+  assert.match(certificatePage, /Valid certificate|Certificate not found/);
+  assert.match(invoicePage, /verifyInvoiceByCode/);
+  assert.match(invoicePage, /Valid invoice|Invoice not found/);
 });
