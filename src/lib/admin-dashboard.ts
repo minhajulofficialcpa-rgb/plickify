@@ -13,9 +13,10 @@ export interface AdminProductRow { id: string; title: string; slug: string; cate
 export interface AdminOrderRow { id: string; order_number: string | null; user_id: string | null; status: string; payment_status: string | null; total_bdt: number | null; created_at: string; profiles?: Relation<Pick<AdminUserRow, "full_name" | "email">> }
 export interface AdminPaymentRow { id: string; order_id: string | null; user_id: string | null; provider: string | null; transaction_id: string | null; amount_bdt: number | null; status: string; created_at: string }
 export interface AdminWebhookLogRow { id: string; provider: string | null; transaction_id: string | null; event_type: string | null; status: string | null; created_at: string }
-export interface AdminAssignmentRow { id: string; title: string; due_at: string | null; status: string | null; course_id: string | null; created_at: string; courses?: Relation<Pick<CourseSummary, "title">> }
-export interface AdminSubmissionRow { id: string; assignment_id: string; user_id: string; status: string; grade: number | null; submitted_at: string | null; assignments?: Relation<Pick<AdminAssignmentRow, "title">>; profiles?: Relation<Pick<AdminUserRow, "full_name" | "email">> }
-export interface AdminTicketRow { id: string; user_id: string | null; subject: string; status: string; priority: string | null; category: string | null; created_at: string; profiles?: Relation<Pick<AdminUserRow, "full_name" | "email">> }
+export interface AdminAssignmentRow { id: string; title: string; instructions: string | null; due_at: string | null; max_marks?: number | null; max_score?: number | null; attachment_url: string | null; status: string | null; course_id: string | null; batch_id: string | null; created_at: string; courses?: Relation<Pick<CourseSummary, "title">>; batches?: Relation<Pick<BatchSummary, "title">> }
+export interface AdminSubmissionRow { id: string; assignment_id: string; user_id: string; status: string; marks?: number | null; score?: number | null; feedback: string | null; submission_text: string | null; submission_url: string | null; github_url: string | null; attachment_url: string | null; submitted_at: string | null; assignments?: Relation<Pick<AdminAssignmentRow, "title">>; profiles?: Relation<Pick<AdminUserRow, "full_name" | "email">> }
+export interface AdminSupportMessageRow { id: string; sender_id: string; sender_role: string | null; message: string; attachment_url: string | null; created_at: string }
+export interface AdminTicketRow { id: string; user_id: string | null; subject: string; message: string | null; status: string; priority: string | null; category: string | null; created_at: string; profiles?: Relation<Pick<AdminUserRow, "full_name" | "email">>; support_messages?: AdminSupportMessageRow[] | null }
 export interface AdminContactRow { id: string; full_name: string | null; email: string | null; subject: string | null; status: string | null; created_at: string }
 export interface AdminReviewRow { id: string; user_id: string | null; rating: number | null; title: string | null; status: string | null; created_at: string; profiles?: Relation<Pick<AdminUserRow, "full_name" | "email">> }
 export interface AdminCertificateRow { id: string; user_id: string; course_id: string | null; certificate_number: string; verification_code: string; issued_at: string; revoked_at: string | null; profiles?: Relation<Pick<AdminUserRow, "full_name" | "email">>; courses?: Relation<Pick<CourseSummary, "title">> }
@@ -26,25 +27,13 @@ const empty = <T>() => [] as T[];
 const canUseAdmin = () => hasSupabaseAdminEnv();
 
 async function readList<T>(query: PromiseLike<QueryResult>): Promise<T[]> {
-  try {
-    const { data, error } = await query;
-    if (error) throw new Error(error.message);
-    return (data ?? []) as T[];
-  } catch (error) {
-    console.warn(error instanceof Error ? error.message : error);
-    return empty<T>();
-  }
+  try { const { data, error } = await query; if (error) throw new Error(error.message); return (data ?? []) as T[]; }
+  catch (error) { console.warn(error instanceof Error ? error.message : error); return empty<T>(); }
 }
 
 async function readCount(query: PromiseLike<QueryResult>) {
-  try {
-    const { count, error } = await query;
-    if (error) throw new Error(error.message);
-    return count ?? 0;
-  } catch (error) {
-    console.warn(error instanceof Error ? error.message : error);
-    return 0;
-  }
+  try { const { count, error } = await query; if (error) throw new Error(error.message); return count ?? 0; }
+  catch (error) { console.warn(error instanceof Error ? error.message : error); return 0; }
 }
 
 export function firstAdminRelation<T>(value: Relation<T> | undefined) {
@@ -92,7 +81,7 @@ export async function getAdminLessons() { if (!canUseAdmin()) return empty<Lesso
 export async function getAdminProducts() { if (!canUseAdmin()) return empty<AdminProductRow>(); return readList<AdminProductRow>(createAdminClient().from("products").select("id, title, slug, category, price_bdt, access_type, status, created_at").order("created_at", { ascending: false }).limit(100)); }
 export async function getAdminOrders() { if (!canUseAdmin()) return empty<AdminOrderRow>(); return readList<AdminOrderRow>(createAdminClient().from("orders").select("id, order_number, user_id, status, payment_status, total_bdt, created_at, profiles(full_name, email)").order("created_at", { ascending: false }).limit(100)); }
 export async function getAdminEnrollments() { if (!canUseAdmin()) return empty<AdminEnrollmentRow>(); return readList<AdminEnrollmentRow>(createAdminClient().from("enrollments").select("id, user_id, course_id, batch_id, status, activation_status, created_at, profiles(full_name, email), courses(title), batches(title)").order("created_at", { ascending: false }).limit(100)); }
-export async function getAdminTickets() { if (!canUseAdmin()) return empty<AdminTicketRow>(); return readList<AdminTicketRow>(createAdminClient().from("support_tickets").select("id, user_id, subject, status, priority, category, created_at, profiles(full_name, email)").order("created_at", { ascending: false }).limit(100)); }
+export async function getAdminTickets() { if (!canUseAdmin()) return empty<AdminTicketRow>(); return readList<AdminTicketRow>(createAdminClient().from("support_tickets").select("id, user_id, subject, message, status, priority, category, created_at, profiles(full_name, email), support_messages(id, sender_id, sender_role, message, attachment_url, created_at)").order("created_at", { ascending: false }).limit(100)); }
 export async function getAdminContacts() { if (!canUseAdmin()) return empty<AdminContactRow>(); return readList<AdminContactRow>(createAdminClient().from("contact_messages").select("id, full_name, email, subject, status, created_at").order("created_at", { ascending: false }).limit(100)); }
 export async function getAdminReviews() { if (!canUseAdmin()) return empty<AdminReviewRow>(); return readList<AdminReviewRow>(createAdminClient().from("reviews").select("id, user_id, rating, title, status, created_at, profiles(full_name, email)").order("created_at", { ascending: false }).limit(100)); }
 export async function getAdminCertificates() { if (!canUseAdmin()) return empty<AdminCertificateRow>(); return readList<AdminCertificateRow>(createAdminClient().from("certificates").select("id, user_id, course_id, certificate_number, verification_code, issued_at, revoked_at, profiles(full_name, email), courses(title)").order("issued_at", { ascending: false }).limit(100)); }
@@ -112,8 +101,8 @@ export async function getAdminAssignments() {
   if (!canUseAdmin()) return { assignments: empty<AdminAssignmentRow>(), submissions: empty<AdminSubmissionRow>() };
   const supabase = createAdminClient();
   const [assignments, submissions] = await Promise.all([
-    readList<AdminAssignmentRow>(supabase.from("assignments").select("id, title, due_at, status, course_id, created_at, courses(title)").order("created_at", { ascending: false }).limit(100)),
-    readList<AdminSubmissionRow>(supabase.from("assignment_submissions").select("id, assignment_id, user_id, status, grade, submitted_at, assignments(title), profiles(full_name, email)").order("submitted_at", { ascending: false }).limit(100))
+    readList<AdminAssignmentRow>(supabase.from("assignments").select("id, title, instructions, due_at, max_marks, max_score, attachment_url, status, course_id, batch_id, created_at, courses(title), batches(title)").order("created_at", { ascending: false }).limit(100)),
+    readList<AdminSubmissionRow>(supabase.from("assignment_submissions").select("id, assignment_id, user_id, status, marks, score, feedback, submission_text, submission_url, github_url, attachment_url, submitted_at, assignments(title), profiles(full_name, email)").order("submitted_at", { ascending: false }).limit(100))
   ]);
   return { assignments, submissions };
 }
