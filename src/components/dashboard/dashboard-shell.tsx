@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Route } from "next";
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
-import { BookOpen, Boxes, FileCheck2, GraduationCap, HelpCircle, Home, LibraryBig, Receipt, User, Video } from "lucide-react";
+import { BookOpen, Boxes, FileCheck2, GraduationCap, HelpCircle, Home, LibraryBig, Receipt, User } from "lucide-react";
 import { NotificationBell } from "@/components/dashboard/notification-bell";
 import type { AppNotification } from "@/lib/notifications";
 
