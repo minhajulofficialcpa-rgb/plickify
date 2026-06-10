@@ -1,39 +1,6 @@
 # Plickify
 
-Production-ready Next.js 15 App Router scaffold for an LMS and digital product shop.
-
-## Stack
-
-- Next.js 15 App Router
-- TypeScript
-- Tailwind CSS
-- shadcn/ui-style components
-- Framer Motion
-- Lucide React Icons
-- Supabase browser/server/admin clients
-- Zod
-- React Hook Form
-
-## Project structure
-
-```txt
-src/app
-src/components/ui
-src/components/public
-src/components/dashboard
-src/components/admin
-src/components/player
-src/components/forms
-src/lib/supabase
-src/lib/auth.ts
-src/lib/permissions.ts
-src/lib/validations.ts
-src/lib/utils.ts
-src/lib/seo.ts
-src/lib/audit.ts
-src/actions
-src/middleware.ts
-```
+Production-ready Next.js 15 App Router scaffold for Plickify with TypeScript, Tailwind CSS, shadcn/ui-style primitives, Framer Motion, Lucide icons, Supabase clients, Zod, and React Hook Form.
 
 ## Getting started
 
@@ -55,6 +22,13 @@ SUPABASE_SERVICE_ROLE_KEY=
 ```
 
 `SUPABASE_SERVICE_ROLE_KEY` is server-only and must never be exposed to client components.
+
+## Implemented systems
+
+- Google-only Supabase auth with onboarding and locked profiles.
+- LMS course, batch, lesson, enrollment, student dashboard, and admin dashboard foundations.
+- Batch assignment submissions with admin review, marks, feedback, and notifications.
+- Threaded support tickets with priorities, attachments, staff replies, status updates, and notifications.
 
 ## Scripts
 
