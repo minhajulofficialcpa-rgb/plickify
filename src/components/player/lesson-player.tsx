@@ -25,11 +25,13 @@ export function LessonPlayer({ lessonId, title, embedUrl, initialPositionSeconds
   const [position, setPosition] = useState(initialPositionSeconds);
   const lastSentRef = useRef(initialPositionSeconds);
   const lastProgressEventRef = useRef(0);
+  const lessonStartSentRef = useRef(false);
   const completedEventSentRef = useRef(false);
   const startedAt = useMemo(() => Date.now(), []);
 
   useEffect(() => {
-    if (!isPlaying) return;
+    if (!isPlaying || lessonStartSentRef.current) return;
+    lessonStartSentRef.current = true;
     trackGaEvent("lesson_start", { lesson_id: lessonId, lesson_title: title, position_seconds: position });
   }, [isPlaying, lessonId, position, title]);
 
