@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { onboardingSchema } from "@/lib/validations";
 
 function getOrigin(headerOrigin: string | null) {
-  return headerOrigin ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  return process.env.NEXT_PUBLIC_SITE_URL ?? headerOrigin ?? "http://localhost:3000";
 }
 
 export async function signInWithGoogleAction() {
