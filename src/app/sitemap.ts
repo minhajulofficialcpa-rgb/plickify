@@ -30,13 +30,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     ...courses.map((course) => ({
       url: absoluteUrl(`/courses/${course.slug}`),
-      lastModified: new Date(course.updatedAt),
+      lastModified: course.published_at ? new Date(course.published_at) : now,
       changeFrequency: "weekly" as const,
       priority: 0.9
     })),
     ...products.map((product) => ({
       url: absoluteUrl(`/products/${product.slug}`),
-      lastModified: new Date(product.updatedAt),
+      lastModified: product.published_at ? new Date(product.published_at) : now,
       changeFrequency: "weekly" as const,
       priority: 0.8
     }))
