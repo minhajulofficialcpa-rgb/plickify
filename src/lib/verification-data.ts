@@ -1,8 +1,7 @@
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-interface Relation<T> extends Array<T> {}
-type MaybeRelation<T> = T | Relation<T> | null;
+type MaybeRelation<T> = T | T[] | null;
 
 export interface CertificateVerificationRecord {
   certificate_number: string;
