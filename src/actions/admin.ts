@@ -5,7 +5,7 @@ import { requirePlatformAdmin, requireSuperAdmin, requireSupportModerator } from
 import { writeAuditEvent } from "@/lib/audit";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { hasSupabaseAdminEnv } from "@/lib/lms";
-import { assignmentMutationSchema, assignmentReviewSchema, supportReplySchema, supportTicketStatusSchema } from "@/lib/validations";
+import { assignmentMutationSchema, assignmentReviewSchema, orderMutationSchema, productMutationSchema, supportReplySchema, supportTicketStatusSchema } from "@/lib/validations";
 
 function ensureAdminEnv() {
   if (!hasSupabaseAdminEnv()) throw new Error("Supabase admin environment variables are required.");
@@ -51,21 +51,39 @@ function revalidateAdmin(path: string) {
 export async function saveProductAction(formData: FormData) {
   const auth = await requirePlatformAdmin();
   const supabase = ensureAdminEnv();
-  const id = text(formData, "id");
-  const payload = {
+  const input = productMutationSchema.parse({
+    id: text(formData, "id") ?? "",
     title: requiredText(formData, "title"),
     slug: requiredText(formData, "slug"),
-    category: text(formData, "category"),
-    price_bdt: numberValue(formData, "priceBdt") ?? 0,
-    access_type: text(formData, "accessType") ?? "download",
-    description: text(formData, "description"),
-    file_path: text(formData, "filePath"),
+    category: requiredText(formData, "category"),
+    priceBdt: numberValue(formData, "priceBdt") ?? 0,
+    accessType: requiredText(formData, "accessType"),
+    description: text(formData, "description") ?? "",
+    privateFilePath: text(formData, "privateFilePath") ?? text(formData, "filePath") ?? "",
     status: text(formData, "status") ?? "draft"
+  });
+  const id = input.id || null;
+  const payload = {
+    title: input.title,
+    slug: input.slug,
+    category: input.category,
+    price_bdt: input.category === "free" || input.accessType === "free" ? 0 : input.priceBdt,
+    access_type: input.accessType,
+    description: input.description || null,
+    private_file_path: input.privateFilePath || null,
+    file_path: null,
+    status: input.status,
+    published_at: input.status === "published" ? new Date().toISOString() : null,
+    created_by: auth.user.id
   };
-  const { error } = id ? await supabase.from("products").update(payload).eq("id", id) : await supabase.from("products").insert(payload);
+  const { data, error } = id
+    ? await supabase.from("products").update(payload).eq("id", id).select("id").single()
+    : await supabase.from("products").insert(payload).select("id").single();
   if (error) throw new Error(error.message);
-  await audit(auth.user.id, id ? "product.update" : "product.create", "products", id, { slug: payload.slug });
+  await audit(auth.user.id, id ? "product.update" : "product.create", "products", data?.id ?? id, { slug: payload.slug, category: payload.category, accessType: payload.access_type });
   revalidateAdmin("/admin/products");
+  revalidatePath("/shop");
+  revalidatePath(`/products/${payload.slug}`);
 }
 
 export async function deleteProductAction(formData: FormData) {
@@ -76,6 +94,7 @@ export async function deleteProductAction(formData: FormData) {
   if (error) throw new Error(error.message);
   await audit(auth.user.id, "product.delete", "products", id);
   revalidateAdmin("/admin/products");
+  revalidatePath("/shop");
 }
 
 export async function updateUserLockAction(formData: FormData) {
@@ -123,6 +142,34 @@ export async function grantFreeAccessAction(formData: FormData) {
   await audit(auth.user.id, "enrollment.free_access", "enrollments", data?.id, { userId, courseId, batchId });
   await notify(userId, "Course access granted", "An admin granted free course access.", "/dashboard/courses", "enrollment", data?.id);
   revalidateAdmin("/admin/enrollments");
+}
+
+export async function updateOrderAccessAction(formData: FormData) {
+  const auth = await requirePlatformAdmin();
+  const supabase = ensureAdminEnv();
+  const input = orderMutationSchema.parse({
+    id: requiredText(formData, "id"),
+    status: requiredText(formData, "status"),
+    paymentStatus: requiredText(formData, "paymentStatus"),
+    activationStatus: requiredText(formData, "activationStatus")
+  });
+  const { data, error } = await supabase.from("orders").update({
+    status: input.status,
+    payment_status: input.paymentStatus,
+    activation_status: input.activationStatus,
+    activated_at: input.activationStatus === "active" ? new Date().toISOString() : null
+  }).eq("id", input.id).select("id, user_id, product_id, access_type, activation_status").single();
+  if (error) throw new Error(error.message);
+
+  if (data?.product_id && input.activationStatus === "active") {
+    await supabase.rpc("grant_product_download_access", { p_user_id: data.user_id, p_product_id: data.product_id, p_order_id: data.id });
+  }
+
+  await audit(auth.user.id, "order.access_update", "orders", input.id, { status: input.status, paymentStatus: input.paymentStatus, activationStatus: input.activationStatus });
+  await notify(data?.user_id, "Order updated", `Order status is now ${input.status}.`, "/dashboard/orders", "order", input.id);
+  revalidateAdmin("/admin/orders");
+  revalidatePath("/dashboard/orders");
+  revalidatePath("/dashboard/downloads");
 }
 
 export async function updateTicketStatusAction(formData: FormData) {
