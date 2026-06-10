@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Plickify Digital Products</title>
+  <desc id="desc">Circular Plickify brand logo with a deep navy background, electric cyan P mark, violet rim, and digital product label.</desc>
+  <defs>
+    <linearGradient id="rim" x1="128" y1="140" x2="1050" y2="1070" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#13d7ff"/>
+      <stop offset="0.48" stop-color="#1389ff"/>
+      <stop offset="1" stop-color="#a933ff"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="402" y1="238" x2="787" y2="704" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22e6ff"/>
+      <stop offset="0.46" stop-color="#0aa8ff"/>
+      <stop offset="1" stop-color="#1557ff"/>
+    </linearGradient>
+    <linearGradient id="word" x1="228" y1="775" x2="1002" y2="775" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.66" stop-color="#ffffff"/>
+      <stop offset="0.67" stop-color="#13d7ff"/>
+      <stop offset="1" stop-color="#1675ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000816" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="1200" fill="#ffffff"/>
+  <circle cx="600" cy="600" r="575" fill="url(#rim)"/>
+  <circle cx="600" cy="600" r="536" fill="#020c38"/>
+  <g filter="url(#shadow)">
+    <path fill="url(#mark)" d="M472 206h218c117 0 211 92 211 206 0 116-94 207-211 207h-78v-93h78c62 0 113-50 113-114 0-63-51-113-113-113H472z"/>
+    <path fill="#ffffff" d="M472 304h210c70 0 126 55 126 123 0 70-56 124-126 124h-70v-93h70c18 0 33-14 33-31 0-18-15-31-33-31H472z"/>
+    <path fill="url(#mark)" d="M472 395h141c70 0 126 55 126 123 0 69-56 124-126 124h-33v-93h33c18 0 33-14 33-31 0-18-15-31-33-31h-48v183c0 31-25 56-56 56h-37z"/>
+    <rect x="386" y="222" width="22" height="22" fill="#70f0ff"/>
+    <rect x="413" y="253" width="26" height="26" fill="#16caff"/>
+    <rect x="367" y="280" width="40" height="40" fill="#0aa8ff"/>
+    <rect x="333" y="331" width="26" height="26" fill="#4367ff"/>
+    <rect x="416" y="342" width="26" height="26" fill="#3858ff"/>
+    <rect x="371" y="366" width="40" height="40" fill="#7138ff"/>
+    <rect x="428" y="393" width="43" height="43" fill="#6240ff"/>
+    <rect x="405" y="446" width="26" height="26" fill="#245eff"/>
+  </g>
+  <text x="600" y="870" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="154" font-weight="800" letter-spacing="-4" fill="url(#word)">Plickify</text>
+  <g fill="none" stroke="#139cff" stroke-width="4" stroke-linecap="round">
+    <path d="M320 932h220"/>
+    <path d="M660 932h220"/>
+    <path d="M575 902h58l-14 45h-35z"/>
+    <path d="M558 891h22l9 56"/>
+  </g>
+  <circle cx="585" cy="965" r="8" fill="#13d7ff"/>
+  <circle cx="626" cy="965" r="8" fill="#13d7ff"/>
+  <text x="600" y="1028" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="700" letter-spacing="22" fill="#ffffff">DIGITAL PRODUCTS</text>
+</svg>
