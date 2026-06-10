@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Route } from "next";
 import { GraduationCap } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireOnboardedUser } from "@/lib/auth";
@@ -21,7 +22,7 @@ export default async function DashboardCertificatesPage() {
           return (
             <Card key={certificate.id}>
               <CardHeader><GraduationCap className="h-6 w-6 text-accent" /><CardTitle>{certificate.certificate_number}</CardTitle><CardDescription>{course?.title ?? "Course certificate"} - issued {formatDate(certificate.issued_at)}</CardDescription></CardHeader>
-              <div className="px-6 pb-6"><Link href={`/certificate/verify/${certificate.verification_code}`} className="text-sm font-semibold text-accent">Verify certificate</Link></div>
+              <div className="px-6 pb-6"><Link href={`/certificate/verify/${certificate.verification_code}` as Route} className="text-sm font-semibold text-accent">Verify certificate</Link></div>
             </Card>
           );
         }) : <Empty label="No certificates yet." />}
