@@ -67,6 +67,7 @@ test('provides requested student dashboard routes', () => {
   for (const path of [
     'src/app/dashboard/page.tsx',
     'src/app/dashboard/courses/page.tsx',
+    'src/app/dashboard/courses/[courseId]/page.tsx',
     'src/app/dashboard/batches/page.tsx',
     'src/app/dashboard/lessons/[lessonId]/page.tsx',
     'src/app/dashboard/assignments/page.tsx',
