@@ -31,10 +31,12 @@ SUPABASE_SERVICE_ROLE_KEY=
 - Threaded support tickets with priorities, attachments, staff replies, status updates, and notifications.
 - Digital product shop with category filters, order access rules, and private signed downloads.
 - Certificate and invoice public verification with QR-backed records.
+- Analytics, in-app notifications, Meta CAPI, and audit hardening are wired for deployment verification.
 - Assignment, support, shop, certificate, and invoice deployment verification are tracked through the production build.
 - Latest digital shop verification trigger: 2026-06-10.
 - Signed URL redirect verification trigger: 2026-06-10.
 - Certificate invoice verification trigger: 2026-06-10.
+- Analytics notification audit verification trigger: 2026-06-10.
 
 ## Scripts
 
