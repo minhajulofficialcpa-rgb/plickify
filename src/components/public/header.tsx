@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LayoutDashboard, LogIn, ShieldCheck, UserRound } from "lucide-react";
+import { ThemeToggle } from "@/components/public/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile, getCurrentRole } from "@/lib/auth";
 import { canAccessAdmin } from "@/lib/permissions";
@@ -34,6 +35,7 @@ export async function PublicHeader() {
           ))}
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           {isSignedIn ? (
             <>
               {showAdmin ? (
