@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, PlayCircle } from "lucide-react";
+import { PlayCircle } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireOnboardedUser } from "@/lib/auth";
 import { firstRelation } from "@/lib/lms";
