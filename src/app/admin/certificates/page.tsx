@@ -1,0 +1,9 @@
+import { issueCertificateAction, revokeCertificateAction } from "@/actions/admin";
+import { Button } from "@/components/ui/button";
+import { AdminPageHeader, AdminSection, AdminTable, Field, HiddenId, StatusBadge } from "@/components/admin/admin-resource-page";
+import { firstAdminRelation, getAdminCertificates } from "@/lib/admin-dashboard";
+
+export default async function AdminCertificatesPage() {
+  const certificates = await getAdminCertificates();
+  return <div><AdminPageHeader eyebrow="Learning" title="Certificates" description="Issue certificates and revoke invalid certificates." /><div className="mt-8 grid gap-6"><AdminSection title="Issue certificate"><form action={issueCertificateAction} className="grid gap-4 md:grid-cols-2"><Field label="User ID" name="userId" /><Field label="Course ID" name="courseId" /><Field label="Certificate number" name="certificateNumber" /><Field label="Verification code" name="verificationCode" /><Button type="submit" variant="accent">Issue certificate</Button></form></AdminSection><AdminSection title="Certificates"><AdminTable rows={certificates} emptyLabel="No certificates found." columns={[{ header: "Certificate", cell: (row) => <div><p className="font-bold text-white">{row.certificate_number}</p><p>{row.verification_code}</p></div> }, { header: "Student", cell: (row) => firstAdminRelation(row.profiles)?.email ?? row.user_id }, { header: "Course", cell: (row) => firstAdminRelation(row.courses)?.title ?? row.course_id ?? "-" }, { header: "Status", cell: (row) => <StatusBadge value={row.revoked_at ? "revoked" : "issued"} /> }, { header: "Action", cell: (row) => row.revoked_at ? "Revoked" : <form action={revokeCertificateAction}><HiddenId id={row.id} /><Button type="submit" size="sm" variant="secondary">Revoke</Button></form> }]} /></AdminSection></div></div>;
+}
