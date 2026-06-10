@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import type { Metadata } from "next";
 import { ShieldCheck, XCircle } from "lucide-react";
 import { PublicFooter } from "@/components/public/footer";
