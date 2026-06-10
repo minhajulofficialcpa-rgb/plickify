@@ -129,7 +129,7 @@ export async function createDownloadUrlAction(formData: FormData) {
     last_downloaded_at: new Date().toISOString()
   }).eq("id", download.id);
 
-  redirect(data.signedUrl);
+  redirect(data.signedUrl as Parameters<typeof redirect>[0]);
 }
 
 export async function submitAssignmentAction(formData: FormData) {
