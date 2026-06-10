@@ -44,8 +44,8 @@ test('sensitive tables use RLS and profile lock is database-enforced', () => {
 
   assert.match(migrations, /complete_profile_onboarding/);
   assert.match(migrations, /is_locked = true/);
-  assert.match(migrations, /profiles_update_unlocked_self/);
-  assert.match(migrations, /not coalesce\(is_locked, false\)/);
+  assert.match(migrations, /profiles_update_unlocked_own_or_admin/);
+  assert.match(migrations, /id = auth\.uid\(\) and is_locked = false/);
 });
 
 test('payment webhook validates signature, blocks duplicates, and rejects amount mismatch', () => {
