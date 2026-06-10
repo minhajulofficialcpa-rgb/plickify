@@ -1,6 +1,8 @@
 -- Certificate, invoice, and public verification support.
 -- Generates stable public codes, QR URLs, certificate URLs, and invoices for paid orders.
 
+alter table public.course_lessons add column if not exists is_locked boolean not null default false;
+
 alter table public.certificates add column if not exists certificate_code text;
 alter table public.certificates add column if not exists certificate_url text;
 alter table public.certificates add column if not exists qr_code_url text;
@@ -66,7 +68,7 @@ as $$
     from public.course_lessons
     where course_id = p_course_id
       and status = 'published'
-      and coalesce(is_locked, false) = false
+      and is_locked = false
   ), lesson_count as (
     select count(*)::numeric as total_lessons from lessons
   ), completed_count as (
@@ -256,13 +258,14 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.audit_logs (actor_id, action, target_table, target_id, metadata)
+  insert into public.audit_logs (actor_id, action, table_name, record_id, old_data, new_data)
   values (
     auth.uid(),
     lower(tg_table_name) || '.' || lower(tg_op),
     tg_table_name,
     coalesce(new.id, old.id),
-    jsonb_build_object('source', 'trigger')
+    case when tg_op in ('UPDATE', 'DELETE') then to_jsonb(old) else null end,
+    case when tg_op in ('INSERT', 'UPDATE') then to_jsonb(new) else null end
   );
   return coalesce(new, old);
 end;
