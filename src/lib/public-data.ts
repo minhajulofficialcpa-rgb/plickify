@@ -40,7 +40,8 @@ export interface PublicProduct {
   slug: string;
   description: string | null;
   price_bdt: number;
-  file_path: string | null;
+  category: string | null;
+  access_type: string | null;
   published_at: string | null;
 }
 
@@ -114,7 +115,8 @@ const fallbackProducts: PublicProduct[] = [
     slug: "launch-checklist-kit",
     description: "Downloadable planning templates for course and product launches.",
     price_bdt: 1200,
-    file_path: "digital-download",
+    category: "paid",
+    access_type: "purchase",
     published_at: new Date().toISOString()
   },
   {
@@ -122,8 +124,9 @@ const fallbackProducts: PublicProduct[] = [
     title: "Content Calendar Pack",
     slug: "content-calendar-pack",
     description: "A practical calendar system for publishing lessons, emails, and shop updates.",
-    price_bdt: 900,
-    file_path: "digital-download",
+    price_bdt: 0,
+    category: "free",
+    access_type: "free",
     published_at: new Date().toISOString()
   }
 ];
@@ -226,17 +229,24 @@ export async function getCourseBySlug(slug: string): Promise<PublicCourse | null
   }
 }
 
-export async function getPublishedProducts(limit = 12): Promise<PublicProduct[]> {
-  if (!hasSupabasePublicEnv()) return fallbackProducts.slice(0, limit);
+export async function getPublishedProducts(limit = 12, category?: string): Promise<PublicProduct[]> {
+  const allowedCategory = category && category !== "all" ? category : null;
+  if (!hasSupabasePublicEnv()) {
+    const rows = allowedCategory ? fallbackProducts.filter((product) => product.category === allowedCategory) : fallbackProducts;
+    return rows.slice(0, limit);
+  }
 
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase
+    let query = supabase
       .from("products")
-      .select("id, title, slug, description, file_path, price_bdt, published_at")
+      .select("id, title, slug, description, category, access_type, price_bdt, published_at")
       .eq("status", "published")
       .order("published_at", { ascending: false })
       .limit(limit);
+
+    if (allowedCategory) query = query.eq("category", allowedCategory);
+    const { data, error } = await query;
 
     if (error) throw new Error(error.message);
     return data?.length ? (data as PublicProduct[]) : fallbackProducts.slice(0, limit);
@@ -254,7 +264,7 @@ export async function getProductBySlug(slug: string): Promise<PublicProduct | nu
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("products")
-      .select("id, title, slug, description, file_path, price_bdt, published_at")
+      .select("id, title, slug, description, category, access_type, price_bdt, published_at")
       .eq("slug", slug)
       .eq("status", "published")
       .maybeSingle();
@@ -312,6 +322,36 @@ export function formatBdt(amount: number) {
 export function formatDate(date: string | null | undefined) {
   if (!date) return "To be announced";
   return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(new Date(date));
+}
+
+export function formatProductCategory(category: string | null | undefined) {
+  switch (category) {
+    case "free":
+      return "Free";
+    case "paid":
+      return "Paid";
+    case "software":
+      return "Software";
+    case "subscription":
+      return "Subscription";
+    case "manual_service":
+      return "Manual Service";
+    default:
+      return "Digital Product";
+  }
+}
+
+export function formatAccessType(accessType: string | null | undefined) {
+  switch (accessType) {
+    case "free":
+      return "Free access";
+    case "manual":
+      return "Manual activation";
+    case "subscription":
+      return "Subscription activation";
+    default:
+      return "Paid purchase";
+  }
 }
 
 export function getCountdownLabel(date: string | null | undefined) {
