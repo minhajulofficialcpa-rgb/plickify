@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Route } from "next";
 import { Lock, PlayCircle } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,7 +24,7 @@ export default async function CourseLessonsPage({ params }: CourseLessonsPagePro
 
       <section className="mt-8 grid gap-3">
         {access.lessons.length ? access.lessons.map((lesson) => (
-          <Link key={lesson.id} href={`/dashboard/lessons/${lesson.id}`} className="grid gap-3 rounded-[1rem] border border-white/10 bg-white/[0.05] p-5 transition hover:bg-white/[0.09] md:grid-cols-[4rem_1fr_auto] md:items-center">
+          <Link key={lesson.id} href={`/dashboard/lessons/${lesson.id}` as Route} className="grid gap-3 rounded-[1rem] border border-white/10 bg-white/[0.05] p-5 transition hover:bg-white/[0.09] md:grid-cols-[4rem_1fr_auto] md:items-center">
             <span className="text-sm font-black text-accent">{lesson.position.toString().padStart(2, "0")}</span>
             <div>
               <h2 className="font-bold text-white">{lesson.title}</h2>
