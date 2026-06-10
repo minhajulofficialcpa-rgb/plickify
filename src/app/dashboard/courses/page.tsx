@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Route } from "next";
 import { PlayCircle } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireOnboardedUser } from "@/lib/auth";
@@ -21,8 +22,9 @@ export default async function DashboardCoursesPage() {
           <div className="grid gap-3 p-6 pt-0">
             {courses.length ? courses.map((enrollment) => {
               const course = firstRelation(enrollment.courses);
+              const href = course ? (`/dashboard/courses/${course.id}` as Route) : "/dashboard/courses";
               return (
-                <Link key={enrollment.id} href={course ? `/dashboard/courses/${course.id}` : "/dashboard/courses"} className="rounded-[1rem] border border-white/10 bg-white/[0.04] p-4 transition hover:bg-white/[0.08]">
+                <Link key={enrollment.id} href={href} className="rounded-[1rem] border border-white/10 bg-white/[0.04] p-4 transition hover:bg-white/[0.08]">
                   <div className="flex items-center justify-between gap-3"><span className="font-bold text-white">{course?.title ?? "Course access"}</span><span className="rounded-full bg-white/10 px-3 py-1 text-xs capitalize text-muted-foreground">{enrollment.status}</span></div>
                   <p className="mt-2 text-sm text-muted-foreground">{course?.description ?? "Course details will appear when published."}</p>
                 </Link>
@@ -35,7 +37,7 @@ export default async function DashboardCoursesPage() {
           <CardHeader><CardTitle>Lesson progress</CardTitle><CardDescription>Recent progress from heartbeat analytics.</CardDescription></CardHeader>
           <div className="grid gap-3 p-6 pt-0">
             {progress.length ? progress.map((lesson) => (
-              <Link key={lesson.id} href={`/dashboard/lessons/${lesson.id}`} className="flex items-center justify-between gap-3 rounded-[1rem] border border-white/10 bg-white/[0.04] p-4 transition hover:bg-white/[0.08]">
+              <Link key={lesson.id} href={`/dashboard/lessons/${lesson.id}` as Route} className="flex items-center justify-between gap-3 rounded-[1rem] border border-white/10 bg-white/[0.04] p-4 transition hover:bg-white/[0.08]">
                 <span className="flex items-center gap-2 text-sm font-bold text-white"><PlayCircle className="h-4 w-4 text-accent" /> {lesson.title}</span>
                 <span className="text-xs text-muted-foreground">{lesson.last_position_seconds}s</span>
               </Link>
