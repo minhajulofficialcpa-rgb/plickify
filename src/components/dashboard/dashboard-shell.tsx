@@ -3,6 +3,8 @@ import type { Route } from "next";
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { BookOpen, Boxes, FileCheck2, GraduationCap, HelpCircle, Home, LibraryBig, Receipt, User, Video } from "lucide-react";
+import { NotificationBell } from "@/components/dashboard/notification-bell";
+import type { AppNotification } from "@/lib/notifications";
 
 interface DashboardNavItem {
   href: Route;
@@ -22,7 +24,7 @@ const links: DashboardNavItem[] = [
   { href: "/dashboard/profile", label: "Profile", icon: User }
 ];
 
-export function DashboardShell({ children }: { children: ReactNode }) {
+export function DashboardShell({ children, notifications = [] }: { children: ReactNode; notifications?: AppNotification[] }) {
   return (
     <div className="min-h-screen">
       <header className="border-b border-white/10 bg-background/75 backdrop-blur-xl">
@@ -35,6 +37,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               </Link>
             ))}
           </div>
+          <NotificationBell notifications={notifications} />
         </nav>
       </header>
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">{children}</main>
