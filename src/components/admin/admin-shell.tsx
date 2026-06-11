@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { AdminNav } from "@/components/admin/admin-nav";
-import { ThemeToggle } from "@/components/public/theme-toggle";
 
 export function AdminShell({ children }: { children: ReactNode }) {
   return (
@@ -18,7 +17,6 @@ export function AdminShell({ children }: { children: ReactNode }) {
               </span>
             </Link>
             <div className="flex items-center gap-2 lg:mt-5">
-              <ThemeToggle />
               <Link href="/dashboard" className="rounded-lg border border-border bg-muted/50 px-3 py-2 text-xs font-bold text-muted-foreground transition hover:text-foreground">Student view</Link>
             </div>
           </div>
