@@ -4,8 +4,8 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export const textareaClass = "min-h-24 w-full rounded-[1rem] border border-white/10 bg-white/10 px-4 py-3 text-sm text-white outline-none transition placeholder:text-muted-foreground focus:border-accent focus:ring-4 focus:ring-accent/10";
-export const selectClass = "h-11 w-full rounded-full border border-white/10 bg-slate-950 px-4 text-sm text-white outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/10";
+export const textareaClass = "min-h-24 w-full rounded-lg border border-border bg-card/90 px-4 py-3 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-accent focus:ring-4 focus:ring-accent/10";
+export const selectClass = "h-11 w-full rounded-full border border-border bg-card/90 px-4 text-sm text-foreground outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/10";
 
 export interface AdminColumn<T> {
   header: string;
@@ -13,12 +13,12 @@ export interface AdminColumn<T> {
 }
 
 export function AdminPageHeader({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
-  return <div><p className="text-sm font-bold uppercase tracking-[0.2em] text-accent">{eyebrow}</p><h1 className="mt-3 text-4xl font-black tracking-[-0.05em]">{title}</h1><p className="mt-3 text-muted-foreground">{description}</p></div>;
+  return <div><p className="text-sm font-bold uppercase tracking-[0.2em] text-accent">{eyebrow}</p><h1 className="mt-3 text-4xl font-black tracking-tight text-foreground">{title}</h1><p className="mt-3 text-muted-foreground">{description}</p></div>;
 }
 
 export function AdminTable<T extends { id: string }>({ columns, rows, emptyLabel }: { columns: AdminColumn<T>[]; rows: T[]; emptyLabel: string }) {
-  if (!rows.length) return <div className="rounded-[1rem] border border-dashed border-white/10 p-6 text-sm text-muted-foreground">{emptyLabel}</div>;
-  return <div className="overflow-x-auto rounded-[1rem] border border-white/10"><table className="w-full min-w-[760px] text-left text-sm"><thead className="bg-white/[0.06] text-xs uppercase tracking-[0.18em] text-muted-foreground"><tr>{columns.map((column) => <th key={column.header} className="px-4 py-3">{column.header}</th>)}</tr></thead><tbody className="divide-y divide-white/10">{rows.map((row) => <tr key={row.id} className="align-top">{columns.map((column) => <td key={column.header} className="px-4 py-4 text-muted-foreground">{column.cell(row)}</td>)}</tr>)}</tbody></table></div>;
+  if (!rows.length) return <div className="rounded-lg border border-dashed border-border bg-card/70 p-6 text-sm text-muted-foreground">{emptyLabel}</div>;
+  return <div className="overflow-x-auto rounded-lg border border-border bg-card/82 shadow-[0_18px_50px_hsl(172_55%_16%/0.08)]"><table className="w-full min-w-[760px] text-left text-sm"><thead className="bg-muted/70 text-xs uppercase tracking-[0.18em] text-muted-foreground"><tr>{columns.map((column) => <th key={column.header} className="px-4 py-3">{column.header}</th>)}</tr></thead><tbody className="divide-y divide-border">{rows.map((row) => <tr key={row.id} className="align-top transition hover:bg-muted/40">{columns.map((column) => <td key={column.header} className="px-4 py-4 text-muted-foreground">{column.cell(row)}</td>)}</tr>)}</tbody></table></div>;
 }
 
 export function AdminSection({ title, description, children }: { title: string; description?: string; children: ReactNode }) {
@@ -46,5 +46,5 @@ export function ActionButton({ children = "Save" }: { children?: ReactNode }) {
 }
 
 export function StatusBadge({ value }: { value: string | null | undefined }) {
-  return <span className="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-semibold capitalize text-white">{value ?? "none"}</span>;
+  return <span className="inline-flex rounded-full bg-accent/12 px-3 py-1 text-xs font-semibold capitalize text-accent ring-1 ring-accent/20">{value ?? "none"}</span>;
 }
