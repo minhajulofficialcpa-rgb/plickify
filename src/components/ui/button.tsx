@@ -4,13 +4,13 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-bold transition duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90",
-        secondary: "border border-border bg-card text-foreground shadow-sm hover:bg-muted",
-        accent: "bg-accent text-accent-foreground shadow-lg shadow-accent/20 hover:bg-accent/90",
+        default: "bg-primary text-primary-foreground shadow-[0_14px_34px_hsl(158_84%_34%/0.24)] hover:bg-primary/90",
+        secondary: "border border-border bg-card/90 text-foreground shadow-sm backdrop-blur hover:border-primary/45 hover:bg-muted",
+        accent: "bg-accent text-accent-foreground shadow-[0_14px_34px_hsl(174_77%_36%/0.22)] hover:bg-accent/90",
         ghost: "text-muted-foreground hover:bg-muted hover:text-foreground"
       },
       size: {
