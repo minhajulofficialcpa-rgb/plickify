@@ -50,10 +50,10 @@ function ProductForm({ product, submitLabel }: { product?: AdminProductRow; subm
       {product ? <HiddenId id={product.id} /> : null}
       <Field label="Title" name="title" defaultValue={product?.title ?? ""} />
       <Field label="Slug" name="slug" defaultValue={product?.slug ?? ""} />
-      <Select label="Category" name="category" options={categoryOptions} />
+      <Select label="Category" name="category" options={categoryOptions} defaultValue={product?.category ?? "free"} />
       <Field label="Price BDT" name="priceBdt" type="number" defaultValue={String(product?.price_bdt ?? 0)} />
-      <Select label="Access type" name="accessType" options={accessOptions} />
-      <Select label="Status" name="status" options={statusOptions} />
+      <Select label="Access type" name="accessType" options={accessOptions} defaultValue={product?.access_type ?? "free"} />
+      <Select label="Status" name="status" options={statusOptions} defaultValue={product?.status ?? "draft"} />
       <Field label="Private file path" name="privateFilePath" placeholder="products/private/file.zip" defaultValue={product?.private_file_path ?? ""} />
       <div className="md:col-span-2"><Textarea label="Description" name="description" defaultValue={product?.description ?? ""} /></div>
       <div className="md:col-span-2"><ActionButton>{submitLabel}</ActionButton></div>
