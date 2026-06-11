@@ -26,21 +26,21 @@
 
 .dark {
   color-scheme: dark;
-  --color-background: hsl(172 64% 7%);
+  --color-background: hsl(172 58% 8%);
   --color-foreground: hsl(150 45% 97%);
-  --color-card: hsl(170 46% 11%);
+  --color-card: hsl(170 42% 13%);
   --color-card-foreground: hsl(150 45% 97%);
-  --color-muted: hsl(169 36% 17%);
-  --color-muted-foreground: hsl(155 16% 74%);
-  --color-border: hsl(169 30% 24%);
+  --color-muted: hsl(169 34% 18%);
+  --color-muted-foreground: hsl(155 18% 78%);
+  --color-border: hsl(169 30% 26%);
   --color-primary: hsl(158 84% 48%);
   --color-primary-foreground: hsl(172 64% 7%);
-  --color-accent: hsl(174 78% 46%);
+  --color-accent: hsl(174 78% 48%);
   --color-accent-foreground: hsl(172 64% 7%);
-  --surface-subtle: hsl(171 48% 9%);
-  --surface-elevated: hsl(170 46% 11% / 88%);
+  --surface-subtle: hsl(171 46% 10%);
+  --surface-elevated: hsl(170 42% 13% / 90%);
   --ring-soft: hsl(158 84% 48% / 24%);
-  --grid-line: hsl(169 30% 24% / 30%);
+  --grid-line: hsl(169 30% 24% / 16%);
 }
 
 * {
@@ -68,7 +68,7 @@ body {
   background:
     linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
     linear-gradient(180deg, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(180deg, hsl(172 64% 7%) 0%, hsl(170 55% 9%) 48%, hsl(184 42% 8%) 100%);
+    linear-gradient(180deg, hsl(172 58% 8%) 0%, hsl(170 48% 10%) 48%, hsl(184 38% 9%) 100%);
   background-attachment: fixed;
   background-size: 46px 46px, 46px 46px, auto;
 }
@@ -81,8 +81,22 @@ a {
   text-underline-offset: 4px;
 }
 
-.text-white {
+.text-white,
+.dark .text-white {
   color: var(--color-foreground);
+}
+
+.dark .text-slate-950,
+.dark .text-slate-900,
+.dark .text-black {
+  color: var(--color-foreground);
+}
+
+.dark .text-slate-600,
+.dark .text-slate-500,
+.dark .text-slate-400,
+.dark .text-slate-300 {
+  color: var(--color-muted-foreground);
 }
 
 .bg-background\/88,
@@ -93,6 +107,48 @@ a {
 
 .dark .bg-background\/88,
 .dark .bg-background\/80,
-.dark .bg-background\/75 {
-  background-color: hsl(172 64% 7% / 84%);
+.dark .bg-background\/75,
+.dark .bg-background\/40 {
+  background-color: hsl(172 58% 8% / 86%);
+}
+
+.dark .bg-card\/96,
+.dark .bg-card\/95,
+.dark .bg-card\/92,
+.dark .bg-card\/90,
+.dark .bg-card\/82,
+.dark .bg-card\/80 {
+  background-color: hsl(170 42% 13% / 92%);
+}
+
+.dark .bg-white\/15,
+.dark .bg-white\/10,
+.dark .bg-white\/5,
+.dark .bg-white\/\[0\.09\],
+.dark .bg-white\/\[0\.08\],
+.dark .bg-white\/\[0\.07\],
+.dark .bg-white\/\[0\.06\],
+.dark .bg-white\/\[0\.05\],
+.dark .bg-white\/\[0\.04\],
+.dark .bg-white\/\[0\.03\] {
+  background-color: hsl(170 38% 16% / 72%);
+}
+
+.dark .border-white\/30,
+.dark .border-white\/20,
+.dark .border-white\/15,
+.dark .border-white\/10 {
+  border-color: hsl(169 30% 29% / 86%);
+}
+
+.dark .bg-slate-950,
+.dark .bg-black {
+  background-color: hsl(172 58% 8%);
+}
+
+.dark .shadow-slate-950\/15,
+.dark .shadow-black\/20,
+.dark .shadow-black\/30,
+.dark .shadow-black\/40 {
+  --tw-shadow-color: hsl(172 64% 3% / 0.34);
 }
