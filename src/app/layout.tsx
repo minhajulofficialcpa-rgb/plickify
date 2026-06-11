@@ -3,6 +3,13 @@ import { AnalyticsScripts } from "@/components/analytics/analytics-scripts";
 import { siteConfig } from "@/lib/seo";
 import "./globals.css";
 
+const forceLightModeScript = `
+try {
+  document.documentElement.classList.remove("dark");
+  window.localStorage.removeItem("plickify-theme");
+} catch {}
+`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
@@ -24,6 +31,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
+        <script dangerouslySetInnerHTML={{ __html: forceLightModeScript }} />
         {children}
         <AnalyticsScripts />
       </body>
