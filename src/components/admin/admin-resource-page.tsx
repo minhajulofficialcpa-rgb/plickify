@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const textareaClass = "min-h-24 w-full rounded-lg border border-border bg-card/90 px-4 py-3 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-accent focus:ring-4 focus:ring-accent/10";
-export const selectClass = "h-11 w-full rounded-full border border-border bg-card/90 px-4 text-sm text-foreground outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/10";
+export const selectClass = "h-11 w-full rounded-lg border border-border bg-card/90 px-4 text-sm text-foreground outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/10";
 
 export interface AdminColumn<T> {
   header: string;
@@ -29,12 +29,12 @@ export function Field({ label, ...props }: InputHTMLAttributes<HTMLInputElement>
   return <div className="grid gap-2"><Label htmlFor={props.name}>{label}</Label><Input id={props.name} {...props} /></div>;
 }
 
-export function Textarea({ label, name }: { label: string; name: string }) {
-  return <div className="grid gap-2"><Label htmlFor={name}>{label}</Label><textarea id={name} name={name} className={textareaClass} /></div>;
+export function Textarea({ label, name, defaultValue }: { label: string; name: string; defaultValue?: string }) {
+  return <div className="grid gap-2"><Label htmlFor={name}>{label}</Label><textarea id={name} name={name} defaultValue={defaultValue} className={textareaClass} /></div>;
 }
 
-export function Select({ label, name, options, required = true }: { label: string; name: string; options: Array<string | { label: string; value: string }>; required?: boolean }) {
-  return <div className="grid gap-2"><Label htmlFor={name}>{label}</Label><select id={name} name={name} className={selectClass} required={required}>{options.map((option) => { const value = typeof option === "string" ? option : option.value; const labelText = typeof option === "string" ? option : option.label; return <option key={`${name}-${value || "empty"}`} value={value}>{labelText}</option>; })}</select></div>;
+export function Select({ label, name, options, required = true, defaultValue }: { label: string; name: string; options: Array<string | { label: string; value: string }>; required?: boolean; defaultValue?: string }) {
+  return <div className="grid gap-2"><Label htmlFor={name}>{label}</Label><select id={name} name={name} className={selectClass} required={required} defaultValue={defaultValue}>{options.map((option) => { const value = typeof option === "string" ? option : option.value; const labelText = typeof option === "string" ? option : option.label; return <option key={`${name}-${value || "empty"}`} value={value}>{labelText}</option>; })}</select></div>;
 }
 
 export function HiddenId({ id }: { id: string }) {
