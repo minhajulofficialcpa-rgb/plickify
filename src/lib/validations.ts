@@ -24,6 +24,23 @@ export const contactMessageSchema = z.object({
   message: z.string().trim().min(10).max(5000)
 });
 
+export const homeHeroMutationSchema = z.object({
+  eyebrow: z.string().trim().min(2).max(120),
+  title: z.string().trim().min(8).max(220),
+  description: z.string().trim().min(20).max(900),
+  primaryCtaLabel: z.string().trim().min(2).max(80),
+  primaryCtaHref: z.string().trim().min(1).max(180),
+  secondaryCtaLabel: z.string().trim().min(2).max(80),
+  secondaryCtaHref: z.string().trim().min(1).max(180),
+  imageUrl: z.string().trim().url(),
+  statOneLabel: z.string().trim().min(2).max(80),
+  statOneValue: z.string().trim().min(1).max(24),
+  statTwoLabel: z.string().trim().min(2).max(80),
+  statTwoValue: z.string().trim().min(1).max(24),
+  statThreeLabel: z.string().trim().min(2).max(80),
+  statThreeValue: z.string().trim().min(1).max(24)
+});
+
 export const courseMutationSchema = z.object({
   id: uuidSchema.optional(),
   title: z.string().trim().min(3).max(180),
@@ -158,6 +175,7 @@ export const profileSchema = onboardingSchema;
 export type OnboardingInput = z.infer<typeof onboardingSchema>;
 export type ProfileInput = z.infer<typeof profileSchema>;
 export type ContactMessageInput = z.infer<typeof contactMessageSchema>;
+export type HomeHeroMutationInput = z.infer<typeof homeHeroMutationSchema>;
 export type CourseMutationInput = z.infer<typeof courseMutationSchema>;
 export type BatchMutationInput = z.infer<typeof batchMutationSchema>;
 export type LessonMutationInput = z.infer<typeof lessonMutationSchema>;
