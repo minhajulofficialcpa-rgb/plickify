@@ -43,10 +43,10 @@ export default async function HomePage() {
               </div>
               <div className="relative">
                 <Image src={homeHero.imageUrl} alt="Students learning with Plickify" width={1400} height={1050} className="aspect-[4/3] w-full rounded-lg object-cover shadow-2xl shadow-slate-950/15" priority />
-                <div className="absolute bottom-4 left-4 right-4 rounded-lg border border-white/30 bg-white/88 p-4 text-slate-950 shadow-xl backdrop-blur-md dark:bg-slate-950/86 dark:text-white">
+                <div className="absolute bottom-4 left-4 right-4 rounded-lg border border-border bg-card/92 p-4 text-foreground shadow-xl backdrop-blur-md">
                   <p className="text-xs font-black uppercase tracking-[0.2em] text-accent">Featured course</p>
                   <h2 className="mt-2 text-xl font-black">{featuredCourse.title}</h2>
-                  <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{featuredCourse.description}</p>
+                  <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">{featuredCourse.description}</p>
                 </div>
               </div>
             </div>
