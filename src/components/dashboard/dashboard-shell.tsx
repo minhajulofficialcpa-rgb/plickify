@@ -3,7 +3,6 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { DashboardNav } from "@/components/dashboard/dashboard-nav";
 import { NotificationBell } from "@/components/dashboard/notification-bell";
-import { ThemeToggle } from "@/components/public/theme-toggle";
 import type { AppNotification } from "@/lib/notifications";
 
 export function DashboardShell({ children, notifications = [] }: { children: ReactNode; notifications?: AppNotification[] }) {
@@ -20,7 +19,6 @@ export function DashboardShell({ children, notifications = [] }: { children: Rea
               </span>
             </Link>
             <div className="flex items-center gap-2 lg:mt-5">
-              <ThemeToggle />
               <NotificationBell notifications={notifications} />
             </div>
           </div>
