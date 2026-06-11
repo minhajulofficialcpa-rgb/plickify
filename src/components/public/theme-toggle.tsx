@@ -30,7 +30,7 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       title={isDark ? "Light mode" : "Dark mode"}
-      className="relative flex h-10 w-[4.75rem] items-center rounded-full border border-border bg-card p-1 shadow-sm transition hover:border-accent/60"
+      className="relative flex h-10 w-[4.75rem] items-center rounded-full border border-border bg-card/92 p-1 shadow-sm backdrop-blur transition hover:border-accent/60 hover:shadow-[0_10px_24px_hsl(172_55%_16%/0.10)]"
     >
       <span className={`absolute top-1 flex h-8 w-8 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-md transition ${isDark ? "translate-x-[2.25rem]" : "translate-x-0"}`}>
         {isDark ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
