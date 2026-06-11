@@ -24,7 +24,7 @@ export default async function AdminSettingsPage() {
     <div>
       <AdminPageHeader eyebrow="Admin" title="Settings" description="Operational configuration and homepage content controls." />
       <div className="mt-8 grid gap-8">
-        <AdminSection title="Homepage hero editor" description="Update the first section of the homepage. Changes publish after save.">
+        <AdminSection title="Homepage hero editor" description="Edit the homepage first screen: headline, buttons, image, and stats. Changes publish after save.">
           <form action={saveHomeHeroAction} className="grid gap-4 md:grid-cols-2">
             <Field label="Eyebrow" name="eyebrow" defaultValue={hero.eyebrow} />
             <Field label="Hero image URL" name="imageUrl" type="url" defaultValue={hero.imageUrl} />
