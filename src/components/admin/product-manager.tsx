@@ -55,7 +55,7 @@ function ProductForm({ product, submitLabel }: { product?: AdminProductRow; subm
       <Select label="Access type" name="accessType" options={accessOptions} defaultValue={product?.access_type ?? "free"} />
       <Select label="Status" name="status" options={statusOptions} defaultValue={product?.status ?? "draft"} />
       <Field label="Private file path" name="privateFilePath" placeholder="products/private/file.zip" defaultValue={product?.private_file_path ?? ""} />
-      <div className="md:col-span-2"><Textarea label="Description" name="description" defaultValue={product?.description ?? ""} /></div>
+      <div className="md:col-span-2"><Textarea label="Description" name="description" defaultValue="" /></div>
       <div className="md:col-span-2"><ActionButton>{submitLabel}</ActionButton></div>
     </form>
   );
