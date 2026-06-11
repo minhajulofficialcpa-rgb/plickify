@@ -92,7 +92,7 @@ function CourseForm({ title, description, submitLabel, initial, compact = false 
     <Field label="Title" name="title" placeholder="Digital Business Foundations" defaultValue={initial?.title ?? ""} />
     <Field label="Slug" name="slug" placeholder="digital-business-foundations" defaultValue={initial?.slug ?? ""} />
     <Field label="Price BDT" name="priceBdt" type="number" defaultValue={String(initial?.price_bdt ?? 0)} />
-    <Field label="Thumbnail URL" name="thumbnailUrl" type="url" defaultValue={initial?.thumbnail_url ?? ""} />
+    <Field label="Thumbnail URL" name="thumbnailUrl" type="url" defaultValue="" />
     <div className="md:col-span-2"><Textarea label="Description" name="description" defaultValue={initial?.description ?? ""} /></div>
     <Select label="Status" name="status" options={statusOptions} defaultValue={initial?.status ?? "draft"} />
     <Check label="Feature on homepage" name="isFeatured" defaultChecked={Boolean(initial?.is_featured)} />
@@ -125,11 +125,11 @@ function LessonForm({ title, description, submitLabel, courses, batches, initial
     <Field label="Title" name="title" defaultValue={initial?.title ?? ""} />
     <Field label="Order" name="position" type="number" defaultValue={String(initial?.position ?? 1)} />
     <Field label="Duration seconds" name="durationSeconds" type="number" defaultValue={String(initial?.duration_seconds ?? 0)} />
-    <Field label="YouTube video ID" name="youtubeVideoId" defaultValue={initial?.youtube_video_id ?? ""} />
-    <Field label="Video URL" name="videoUrl" type="url" defaultValue={initial?.video_url ?? ""} />
+    <Field label="YouTube video ID" name="youtubeVideoId" defaultValue="" />
+    <Field label="Video URL" name="videoUrl" type="url" defaultValue="" />
     <Select label="Status" name="status" options={statusOptions} defaultValue={initial?.status ?? "draft"} />
     <div className="md:col-span-2"><Textarea label="Description" name="description" defaultValue={initial?.description ?? ""} /></div>
-    <div className="md:col-span-2"><Textarea label="Lesson notes" name="content" defaultValue={initial?.content ?? ""} /></div>
+    <div className="md:col-span-2"><Textarea label="Lesson notes" name="content" defaultValue="" /></div>
     <Check label="Preview" name="isPreview" defaultChecked={Boolean(initial?.is_preview)} />
     <Check label="Locked" name="isLocked" defaultChecked={Boolean(initial?.is_locked)} />
     <div className="md:col-span-2"><Button type="submit" variant="accent">{submitLabel}</Button></div>
