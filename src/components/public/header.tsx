@@ -2,7 +2,6 @@ import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, ChevronDown, LayoutDashboard, LogIn, LogOut, ShieldCheck, UserRound } from "lucide-react";
-import { ThemeToggle } from "@/components/public/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile, getCurrentRole } from "@/lib/auth";
 import { publicNavItems } from "@/lib/home-content";
@@ -32,7 +31,6 @@ export async function PublicHeader() {
           ))}
         </div>
         <div className="flex items-center gap-2">
-          <ThemeToggle />
           {isSignedIn ? (
             <div className="group relative">
               <button type="button" className="flex items-center gap-2 rounded-full border border-border bg-card/92 px-2 py-1.5 text-sm font-bold text-foreground shadow-sm backdrop-blur transition hover:border-accent/60 hover:shadow-[0_12px_28px_hsl(172_55%_16%/0.10)]" aria-haspopup="menu">
